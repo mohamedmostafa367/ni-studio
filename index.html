@@ -1,0 +1,2888 @@
+```html
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NI Studio // Photography & Visual Stories</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+
+        :root {
+            --bg-color: #F3F6F1;
+            --surface-color: #E4EEE7;
+            --card-bg: #FFFFFF;
+            --text-color: #263832;
+            --text-muted: rgba(38, 56, 50, 0.68);
+            --accent-color: #F2946E;
+            --accent-glow: rgba(242, 148, 110, 0.30);
+            --sage-color: #8CAF97;
+            --soft-coral: #FBE4D8;
+            --border-color: rgba(38, 56, 50, 0.12);
+
+            --font-main: 'Work Sans', sans-serif;
+            --font-code: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: auto !important;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           HUD
+        ========================= */
+
+        .viewfinder-hud {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1000;
+            padding: 25px;
+        }
+
+        .hud-corner {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border: 2px solid rgba(38,56,50,.13);
+        }
+
+        .top-left {
+            top:20px;
+            left:20px;
+            border-right:none;
+            border-bottom:none;
+        }
+
+        .top-right {
+            top:20px;
+            right:20px;
+            border-left:none;
+            border-bottom:none;
+        }
+
+        .bottom-left {
+            bottom:20px;
+            left:20px;
+            border-right:none;
+            border-top:none;
+        }
+
+        .bottom-right {
+            bottom:20px;
+            right:20px;
+            border-left:none;
+            border-top:none;
+        }
+
+        .hud-status {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            font-family:var(--font-code);
+            font-size:12px;
+            letter-spacing:1.5px;
+            color:var(--text-muted);
+        }
+
+        .hud-status:last-child {
+            position:absolute;
+            bottom:25px;
+            left:25px;
+            right:25px;
+        }
+
+        .rec-tag {
+            display:flex;
+            align-items:center;
+            gap:8px;
+            color:var(--accent-color);
+            font-weight:700;
+        }
+
+        .rec-dot {
+            width:10px;
+            height:10px;
+            background:var(--accent-color);
+            border-radius:50%;
+            animation:pulse-rec 1.2s infinite alternate;
+        }
+
+        @keyframes pulse-rec {
+            0% {
+                opacity:.2;
+                transform:scale(.8);
+            }
+
+            100% {
+                opacity:1;
+                transform:scale(1.2);
+                box-shadow:0 0 10px var(--accent-color);
+            }
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .site-header {
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            padding:30px 50px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            z-index:1001;
+            backdrop-filter:blur(10px);
+            background:rgba(243,246,241,.82);
+            border-bottom:1px solid var(--border-color);
+        }
+
+        .brand-logo {
+            font-family:var(--font-code);
+            font-size:24px;
+            font-weight:700;
+            letter-spacing:3px;
+            text-transform:uppercase;
+            color:var(--text-color);
+            text-decoration:none;
+        }
+
+        .brand-logo span {
+            color:var(--accent-color);
+        }
+
+        .nav-items {
+            display:flex;
+            align-items:center;
+            gap:35px;
+        }
+
+        .nav-link {
+            color:var(--text-color);
+            text-decoration:none;
+            font-size:15px;
+            font-weight:500;
+            letter-spacing:1px;
+            transition:.3s ease;
+        }
+
+        .nav-link:hover {
+            color:var(--accent-color);
+        }
+
+        .darkroom-btn {
+            background:transparent;
+            border:1px solid var(--border-color);
+            color:var(--text-color);
+            padding:8px 18px;
+            border-radius:30px;
+            font-family:var(--font-main);
+            font-size:13px;
+            transition:.4s ease;
+            text-decoration:none;
+        }
+
+        .darkroom-btn:hover {
+            border-color:var(--accent-color);
+            color:#fff;
+            background:var(--accent-color);
+            box-shadow:0 0 15px var(--accent-glow);
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            position:relative;
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            padding:110px 20px 40px;
+            overflow:hidden;
+        }
+
+        .hero-bg-media {
+            position:absolute;
+            inset:0;
+            z-index:1;
+            opacity:.38;
+            filter:saturate(85%) brightness(.82);
+        }
+
+        .hero-bg-media img {
+            width:100%;
+            height:100%;
+            object-fit:cover;
+        }
+
+        .hero-content {
+            position:relative;
+            z-index:2;
+            max-width:900px;
+        }
+
+        .hero-title {
+            font-size:4.5rem;
+            font-weight:900;
+            line-height:1.1;
+            letter-spacing:-1px;
+            margin-bottom:25px;
+
+            background:linear-gradient(
+                180deg,
+                #263832 0%,
+                #52685E 100%
+            );
+
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+        }
+
+        .hero-desc {
+            font-size:1.25rem;
+            color:var(--text-muted);
+            max-width:650px;
+            margin:0 auto 40px;
+            font-weight:300;
+        }
+
+        .shutter-trigger {
+            width:130px;
+            height:130px;
+            border:1px dashed var(--accent-color);
+            border-radius:50%;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            margin:auto;
+            transition:.5s cubic-bezier(.16,1,.3,1);
+            background:rgba(255,255,255,.45);
+            backdrop-filter:blur(5px);
+        }
+
+        .shutter-trigger:hover {
+            transform:scale(1.1) rotate(90deg);
+            border-style:solid;
+            background:var(--accent-glow);
+            box-shadow:0 0 30px var(--accent-glow);
+        }
+
+        .shutter-icon {
+            width:30px;
+            height:30px;
+            border:2px solid var(--accent-color);
+            border-radius:50%;
+        }
+
+        .shutter-text {
+            font-size:11px;
+            font-family:var(--font-code);
+            margin-top:8px;
+            color:var(--accent-color);
+            letter-spacing:1px;
+        }
+
+        /* =========================
+           MODES
+        ========================= */
+
+        .modes-bar {
+            padding:30px;
+            background:var(--surface-color);
+            border-top:1px solid var(--border-color);
+            border-bottom:1px solid var(--border-color);
+            display:flex;
+            justify-content:center;
+            gap:20px;
+            flex-wrap:wrap;
+            position:relative;
+            z-index:10;
+        }
+
+        .filter-btn {
+            background:transparent;
+            border:1px solid var(--border-color);
+            color:var(--text-muted);
+            padding:10px 24px;
+            border-radius:8px;
+            font-family:var(--font-main);
+            font-size:14px;
+            transition:.3s ease;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background:var(--accent-color);
+            color:#fff;
+            font-weight:700;
+            border-color:var(--accent-color);
+            box-shadow:0 0 15px var(--accent-glow);
+        }
+
+        /* =========================
+           GENERAL SECTIONS
+        ========================= */
+
+        .gallery-section,
+        .reels-section,
+        .compare-section {
+            padding:100px 50px;
+            position:relative;
+            z-index:2;
+            background:var(--bg-color);
+        }
+
+        .section-header {
+            margin-bottom:60px;
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-end;
+        }
+
+        .section-title {
+            font-family:var(--font-code);
+            font-size:2rem;
+            color:var(--text-color);
+            letter-spacing:2px;
+        }
+
+        .section-subtitle {
+            color:var(--text-muted);
+            margin-top:10px;
+        }
+
+        /* =========================
+           GALLERY — EDITORIAL COLLAGE
+        ========================= */
+
+        .gallery-grid {
+            display:grid;
+            grid-template-columns:repeat(12,1fr);
+            grid-template-rows:repeat(4,220px);
+            gap:8px;
+            max-width:1400px;
+            margin:0 auto;
+        }
+
+        .gallery-item {
+            background:var(--card-bg);
+            border-radius:0;
+            overflow:hidden;
+            border:none;
+            transition:.5s cubic-bezier(.16,1,.3,1);
+            position:relative;
+            min-width:0;
+            min-height:0;
+        }
+
+        /* LARGE LEFT IMAGE */
+
+        .gallery-item:nth-child(1) {
+            grid-column:1 / span 5;
+            grid-row:1 / span 4;
+        }
+
+        /* TOP CENTER */
+
+        .gallery-item:nth-child(2) {
+            grid-column:6 / span 3;
+            grid-row:1 / span 2;
+        }
+
+        /* LARGE RIGHT IMAGE */
+
+        .gallery-item:nth-child(3) {
+            grid-column:9 / span 4;
+            grid-row:1 / span 3;
+        }
+
+        /* SMALL CENTER */
+
+        .gallery-item:nth-child(4) {
+            grid-column:6 / span 3;
+            grid-row:3 / span 2;
+        }
+
+        /* BOTTOM CENTER-WIDE */
+
+        .gallery-item:nth-child(5) {
+            grid-column:9 / span 2;
+            grid-row:4 / span 1;
+        }
+
+        /* BOTTOM RIGHT */
+
+        .gallery-item:nth-child(6) {
+            grid-column:11 / span 2;
+            grid-row:4 / span 1;
+        }
+
+        .gallery-item:hover {
+            transform:translateY(-6px);
+            box-shadow:0 18px 40px rgba(0,0,0,.16);
+            z-index:5;
+        }
+
+        .gallery-img-wrapper {
+            position:relative;
+            width:100%;
+            height:100%;
+            overflow:hidden;
+        }
+
+        .gallery-img-wrapper img {
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            transition:.8s cubic-bezier(.16,1,.3,1);
+            cursor:pointer;
+            display:block;
+        }
+
+        .gallery-item:hover img {
+            transform:scale(1.08);
+        }
+
+        .lens-badge {
+            position:absolute;
+            top:15px;
+            right:15px;
+            z-index:2;
+            background:rgba(0,0,0,.65);
+            border:1px solid rgba(255,255,255,.15);
+            backdrop-filter:blur(8px);
+            padding:4px 12px;
+            border-radius:20px;
+            font-family:var(--font-code);
+            font-size:11px;
+            color:var(--accent-color);
+        }
+
+        .gallery-details {
+            position:absolute;
+            left:0;
+            right:0;
+            bottom:0;
+            padding:28px 22px 20px;
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-end;
+            gap:15px;
+            background:linear-gradient(
+                transparent,
+                rgba(0,0,0,.78)
+            );
+            color:#fff;
+            opacity:0;
+            transform:translateY(10px);
+            transition:.45s ease;
+            pointer-events:none;
+        }
+
+        .gallery-item:hover .gallery-details {
+            opacity:1;
+            transform:translateY(0);
+        }
+
+        .item-info h3 {
+            font-size:1.1rem;
+            margin-bottom:3px;
+        }
+
+        .item-info p {
+            font-size:.85rem;
+            color:rgba(255,255,255,.7);
+        }
+
+        .camera-specs {
+            text-align:left;
+            font-family:var(--font-code);
+            font-size:.62rem;
+            color:rgba(255,255,255,.72);
+            border-left:1px solid rgba(255,255,255,.3);
+            padding-left:12px;
+            white-space:nowrap;
+        }
+
+        /* =========================
+           REELS
+        ========================= */
+
+        .reels-section {
+            background:var(--surface-color);
+            border-top:1px solid var(--border-color);
+            border-bottom:1px solid var(--border-color);
+        }
+
+        .reels-grid {
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:35px;
+            max-width:1100px;
+            margin:auto;
+        }
+
+        .reel-card {
+            position:relative;
+            border-radius:20px;
+            overflow:visible;
+            background:#1d2925;
+            border:1px solid var(--border-color);
+            min-height:600px;
+        }
+
+        .reel-card video {
+            width:100%;
+            height:600px;
+            display:block;
+            object-fit:contain;
+        }
+
+        .reel-overlay {
+            position:absolute;
+            bottom:0;
+            left:0;
+            right:0;
+            padding:25px;
+            background:linear-gradient(
+                transparent,
+                rgba(0,0,0,.8)
+            );
+            color:#fff;
+        }
+
+        .reel-overlay span {
+            font-family:var(--font-code);
+            font-size:11px;
+            color:var(--accent-color);
+            letter-spacing:2px;
+        }
+
+        .reel-overlay h3 {
+            margin-top:7px;
+            font-size:1.4rem;
+        }
+
+        .fullscreen-btn {
+            position:absolute;
+            top:18px;
+            right:18px;
+            width:42px;
+            height:42px;
+            border:1px solid rgba(255,255,255,.25);
+            border-radius:50%;
+            background:rgba(0,0,0,.55);
+            color:#fff;
+            font-size:20px;
+            cursor:pointer;
+            z-index:10;
+            backdrop-filter:blur(8px);
+            transition:.25s ease;
+        }
+
+        .fullscreen-btn:hover {
+            background:var(--accent-color);
+            transform:scale(1.08);
+        }
+
+        /* VIDEO PREVIEW */
+
+        .video-preview {
+            position:absolute;
+            inset:0;
+            display:none;
+            z-index:5;
+            background:#1d2925;
+        }
+
+        .video-preview.ready {
+            display:none;
+        }
+
+        .video-preview canvas {
+            width:100%;
+            height:100%;
+            object-fit:contain;
+            display:block;
+        }
+
+        .video-preview button {
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%,-50%);
+            width:68px;
+            height:68px;
+            border:none;
+            border-radius:50%;
+            background:rgba(242,148,110,.95);
+            color:#fff;
+            font-size:25px;
+            cursor:pointer !important;
+            box-shadow:0 10px 30px rgba(0,0,0,.28);
+            transition:.25s ease;
+        }
+
+        .video-preview button:hover {
+            transform:translate(-50%,-50%) scale(1.08);
+        }
+
+        /* =========================
+           BEFORE / AFTER
+        ========================= */
+
+        .compare-section {
+            background:var(--bg-color);
+        }
+
+        .compare-heading {
+            text-align:center;
+            max-width:600px;
+            margin:0 auto;
+        }
+
+        .compare-container {
+            position:relative;
+            max-width:1000px;
+            height:550px;
+            margin:40px auto 0;
+            border-radius:16px;
+            overflow:hidden;
+            border:1px solid var(--border-color);
+        }
+
+        .compare-img {
+            position:absolute;
+            inset:0;
+            background-size:contain;
+            background-position:center;
+        }
+
+        .compare-before {
+            background-image:url('77.jpg');
+            filter:grayscale(100%) contrast(90%);
+        }
+
+        .compare-after {
+            background-image:url('77.jpg');
+            width:50%;
+        }
+
+        .compare-slider {
+            position:absolute;
+            top:0;
+            bottom:0;
+            left:50%;
+            width:4px;
+            background:var(--accent-color);
+            transform:translateX(-50%);
+        }
+
+        .compare-handle {
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%,-50%);
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            background:var(--accent-color);
+            color:#fff;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:bold;
+            box-shadow:0 0 15px var(--accent-glow);
+        }
+
+        /* =========================
+           STUDIO RATES
+        ========================= */
+
+        .studio-rates {
+            padding:110px 6%;
+            background:var(--bg-color);
+        }
+
+        .rates-top {
+            max-width:1100px;
+            margin:0 auto 55px;
+        }
+
+        .rates-top > span {
+            color:var(--accent-color);
+            font-size:12px;
+            letter-spacing:3px;
+        }
+
+        .rates-top h2 {
+            margin:12px 0;
+            font-size:clamp(42px,7vw,90px);
+            line-height:.9;
+            color:var(--text-color);
+        }
+
+        .rates-flow {
+            font-size:11px;
+            letter-spacing:2px;
+            color:var(--text-muted);
+        }
+
+        .rates-flow b {
+            color:var(--accent-color);
+            margin:0 10px;
+        }
+
+        .rates-board {
+            max-width:1100px;
+            margin:auto;
+        }
+
+        .rate-row {
+            display:grid;
+            grid-template-columns:90px 1fr auto;
+            align-items:center;
+            padding:30px 10px;
+            border-top:1px solid var(--border-color);
+            transition:.35s ease;
+        }
+
+        .rate-row:last-child {
+            border-bottom:1px solid var(--border-color);
+        }
+
+        .rate-row:hover {
+            background:var(--soft-coral);
+            padding-left:35px;
+            padding-right:35px;
+            transform:scale(1.02);
+            box-shadow:-8px 0 0 var(--accent-color);
+            z-index:2;
+        }
+
+        .rate-row:hover .rate-index {
+            transform:translateX(8px) scale(1.3);
+            color:var(--accent-color);
+        }
+
+        .rate-row:hover .rate-value strong {
+            transform:scale(1.18);
+        }
+
+        .rates-board:hover .rate-row:not(:hover) {
+            opacity:.45;
+            transform:scale(.98);
+        }
+
+        .rate-index {
+            font-size:13px;
+            color:var(--accent-color);
+        }
+
+        .rate-content h3 {
+            font-size:20px;
+            letter-spacing:1px;
+            color:var(--text-color);
+        }
+
+        .rate-content p {
+            margin-top:6px;
+            font-size:10px;
+            letter-spacing:2px;
+            color:var(--text-muted);
+        }
+
+        .rate-value {
+            text-align:right;
+        }
+
+        .rate-value strong {
+            display:block;
+            font-size:34px;
+            color:var(--text-color);
+            transition:.35s ease;
+        }
+
+        .rate-row:hover .rate-value strong {
+            color:var(--accent-color);
+            transform:scale(1.08);
+        }
+
+        .rate-value span {
+            font-size:9px;
+            letter-spacing:2px;
+            color:var(--text-muted);
+        }
+
+        /* =========================
+           BOOKING
+        ========================= */
+
+        .booking-section {
+            padding:110px 50px;
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--surface-color) 0%,
+                    var(--bg-color) 55%,
+                    var(--soft-coral) 150%
+                );
+            border-top:1px solid var(--border-color);
+        }
+
+        .booking-wrap {
+            max-width:1180px;
+            margin:auto;
+            display:grid;
+            grid-template-columns:.8fr 1.2fr;
+            gap:70px;
+            align-items:start;
+        }
+
+        .booking-intro {
+            padding-top:8px;
+        }
+
+        .booking-kicker {
+            font-family:var(--font-code);
+            font-size:12px;
+            letter-spacing:2px;
+            color:var(--accent-color);
+            font-weight:700;
+        }
+
+        .booking-intro h2 {
+            font-family:var(--font-code);
+            font-size:clamp(2.6rem,5vw,4.5rem);
+            line-height:1;
+            margin:18px 0 22px;
+        }
+
+        .booking-intro p {
+            max-width:420px;
+            color:var(--text-muted);
+        }
+
+        .booking-note {
+            display:flex;
+            align-items:center;
+            gap:10px;
+            margin-top:32px;
+            font-size:13px;
+            color:var(--text-muted);
+        }
+
+        .note-dot {
+            width:10px;
+            height:10px;
+            border-radius:50%;
+            background:var(--sage-color);
+            box-shadow:0 0 0 6px rgba(140,175,151,.16);
+        }
+
+        .booking-form {
+            background:rgba(255,255,255,.76);
+            border:1px solid var(--border-color);
+            border-radius:28px;
+            padding:32px;
+            box-shadow:0 18px 50px rgba(38,56,50,.08);
+            backdrop-filter:blur(8px);
+        }
+
+        .form-grid {
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:18px;
+        }
+
+        .booking-form label {
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+        }
+
+        .booking-form label span {
+            font-size:12px;
+            font-weight:600;
+        }
+
+        .booking-form input,
+        .booking-form select,
+        .booking-form textarea {
+            width:100%;
+            border:1px solid rgba(38,56,50,.12);
+            background:rgba(243,246,241,.78);
+            color:var(--text-color);
+            border-radius:15px;
+            padding:13px 14px;
+            font:inherit;
+            outline:none;
+            transition:.25s ease;
+        }
+
+        .booking-form textarea {
+            resize:vertical;
+            min-height:110px;
+        }
+
+        .booking-form input:focus,
+        .booking-form select:focus,
+        .booking-form textarea:focus {
+            border-color:var(--accent-color);
+            box-shadow:0 0 0 4px var(--accent-glow);
+            background:#fff;
+        }
+
+        .full-field {
+            grid-column:1/-1;
+        }
+
+        .booking-submit {
+            margin-top:20px;
+            width:100%;
+            border:none;
+            border-radius:999px;
+            padding:15px 20px;
+            background:var(--text-color);
+            color:#fff;
+            font:600 14px var(--font-main);
+            transition:.25s ease;
+        }
+
+        .booking-submit:hover {
+            transform:translateY(-2px);
+            box-shadow:0 12px 24px rgba(38,56,50,.15);
+        }
+
+        .form-success {
+            display:none;
+            margin-top:14px;
+            text-align:center;
+            color:#4D745A;
+            font-size:13px;
+        }
+
+        .form-success.show {
+            display:block;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            padding:40px 50px;
+            background:var(--text-color);
+            color:#fff;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            font-size:13px;
+        }
+
+        footer span {
+            color:var(--accent-color);
+        }
+
+        /* =========================
+           INSTAGRAM
+        ========================= */
+
+        .instagram-link {
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            width:42px;
+            height:42px;
+            border:1px solid rgba(255,255,255,.25);
+            border-radius:50%;
+            color:#fff;
+            text-decoration:none;
+            transition:.35s ease;
+        }
+
+        .instagram-link svg {
+            width:20px;
+            height:20px;
+            fill:none;
+            stroke:currentColor;
+            stroke-width:1.8;
+            stroke-linecap:round;
+            stroke-linejoin:round;
+            transition:.35s ease;
+        }
+
+        .instagram-link:hover {
+            color:#fff;
+            background:var(--accent-color);
+            border-color:var(--accent-color);
+            transform:translateY(-3px);
+            box-shadow:0 8px 20px var(--accent-glow);
+        }
+
+        .instagram-link:hover svg {
+            transform:scale(1.08);
+        }
+
+        /* =========================
+           LIGHTBOX
+        ========================= */
+
+        .lightbox {
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.92);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            z-index:9999;
+            padding:30px;
+        }
+
+        .lightbox img {
+            max-width:95%;
+            max-height:90vh;
+            object-fit:contain;
+        }
+
+        .lightbox-close {
+            position:absolute;
+            top:25px;
+            right:30px;
+            background:none;
+            border:none;
+            color:#fff;
+            font-size:40px;
+            cursor:pointer;
+        }
+
+        .lightbox-prev,
+        .lightbox-next {
+            position:absolute;
+            top:50%;
+            transform:translateY(-50%);
+            background:rgba(0,0,0,.4);
+            border:1px solid rgba(255,255,255,.2);
+            color:#fff;
+            width:48px;
+            height:48px;
+            border-radius:50%;
+            font-size:20px;
+            cursor:pointer;
+            z-index:2;
+        }
+
+        .lightbox-prev {
+            left:25px;
+        }
+
+        .lightbox-next {
+            right:25px;
+        }
+
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            background:var(--accent-color);
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media(max-width:900px) {
+
+            .site-header {
+                padding:20px;
+            }
+
+            .nav-items {
+                gap:12px;
+            }
+
+            .nav-link {
+                display:none;
+            }
+
+            /* HERO TEXT HIDDEN ON MOBILE */
+
+            .hero-title,
+            .hero-desc {
+                display:none;
+            }
+
+            /* =========================
+               MOBILE GALLERY
+            ========================= */
+
+            .gallery-section,
+            .reels-section,
+            .compare-section,
+            .booking-section {
+                padding:70px 20px;
+            }
+
+            .gallery-grid {
+                grid-template-columns:repeat(2,1fr);
+                grid-template-rows:repeat(6,190px);
+                gap:6px;
+            }
+
+            .gallery-item:nth-child(1) {
+                grid-column:1 / span 2;
+                grid-row:1 / span 2;
+            }
+
+            .gallery-item:nth-child(2) {
+                grid-column:1;
+                grid-row:3 / span 2;
+            }
+
+            .gallery-item:nth-child(3) {
+                grid-column:2;
+                grid-row:3 / span 2;
+            }
+
+            .gallery-item:nth-child(4) {
+                grid-column:1 / span 2;
+                grid-row:5;
+            }
+
+            .gallery-item:nth-child(5) {
+                grid-column:1;
+                grid-row:6;
+            }
+
+            .gallery-item:nth-child(6) {
+                grid-column:2;
+                grid-row:6;
+            }
+
+            .gallery-details {
+                opacity:1;
+                transform:none;
+                padding:20px 14px 14px;
+            }
+
+            .item-info h3 {
+                font-size:.9rem;
+            }
+
+            .camera-specs {
+                display:none;
+            }
+
+            /* REELS */
+
+            .reels-grid {
+                grid-template-columns:1fr;
+            }
+
+            .reel-card,
+            .reel-card video {
+                min-height:520px;
+                height:520px;
+            }
+
+            /* MOBILE VIDEO PREVIEW */
+
+            .video-preview.ready {
+                display:block;
+            }
+
+            .video-preview button {
+                width:62px;
+                height:62px;
+                font-size:22px;
+            }
+
+            .booking-wrap {
+                grid-template-columns:1fr;
+                gap:35px;
+            }
+
+            .booking-form {
+                padding:22px;
+            }
+
+            .form-grid {
+                grid-template-columns:1fr;
+            }
+
+            .full-field {
+                grid-column:auto;
+            }
+
+            .compare-container {
+                height:350px;
+            }
+
+            .hud-status {
+                font-size:8px;
+            }
+
+            .hud-status div:nth-child(2) {
+                display:none;
+            }
+
+            footer {
+                padding:30px 20px;
+                flex-direction:column;
+                gap:15px;
+                text-align:center;
+            }
+
+            .lightbox-prev {
+                left:10px;
+            }
+
+            .lightbox-next {
+                right:10px;
+            }
+
+        }
+
+        @media(max-width:700px) {
+
+            .studio-rates {
+                padding:80px 5%;
+            }
+
+            .rate-row {
+                grid-template-columns:45px 1fr;
+                gap:15px;
+            }
+
+            .rate-value {
+                grid-column:2;
+                text-align:left;
+                margin-top:10px;
+            }
+
+            .rate-value strong {
+                font-size:30px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         VIEWFINDER HUD
+    ========================= -->
+
+    <div class="viewfinder-hud">
+
+        <div class="hud-corner top-left"></div>
+        <div class="hud-corner top-right"></div>
+        <div class="hud-corner bottom-left"></div>
+        <div class="hud-corner bottom-right"></div>
+
+        <div class="hud-status">
+
+            <div class="rec-tag">
+                <span class="rec-dot"></span>
+                LIVE // 4K HDR
+            </div>
+
+            <div>
+                FPS: <span id="fpsCounter">60</span>
+            </div>
+
+            <div>
+                SHUTTER: 1/8000s
+            </div>
+
+        </div>
+
+        <div class="hud-status">
+
+            <div>
+                NI STUDIO // CREATIVE SYSTEM
+            </div>
+
+            <div>
+                ISO 200 // f/1.2
+            </div>
+
+            <div>
+                FORMAT: RAW 16-BIT
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header class="site-header">
+
+        <a href="#" class="brand-logo">
+            NI<span>.STUDIO</span>
+        </a>
+
+        <nav class="nav-items">
+
+            <a href="#gallery" class="nav-link">
+                Portfolio
+            </a>
+
+            <a href="#reels" class="nav-link">
+                Reels
+            </a>
+
+            <a href="#compare" class="nav-link">
+                Retouching
+            </a>
+
+            <a href="#booking" class="darkroom-btn">
+                Book Now
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         HERO
+    ========================= -->
+
+    <section class="hero">
+
+        <div class="hero-bg-media">
+
+            <img
+                src="home.jpeg"
+                alt="Camera Lens"
+            >
+
+        </div>
+
+        <div class="hero-content">
+
+            <h1 class="hero-title">
+                We tell your story<br>
+                in light and color
+            </h1>
+
+            <p class="hero-desc">
+                Portraits, events, and product stories crafted with a warm,
+                modern visual style.
+            </p>
+
+            <div class="shutter-trigger" id="shutterBtn">
+
+                <div class="shutter-icon"></div>
+
+                <span class="shutter-text">
+                    Capture the moment
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FILTER BAR
+    ========================= -->
+
+    <div class="modes-bar">
+
+        <button class="filter-btn active" data-filter="all">
+            All Work
+        </button>
+
+        <button class="filter-btn" data-filter="portrait">
+            Portraits
+        </button>
+
+        <button class="filter-btn" data-filter="location">
+            Locations
+        </button>
+
+        <button class="filter-btn" data-filter="event">
+            Events
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         GALLERY — 6 IMAGES
+    ========================= -->
+
+    <section class="gallery-section" id="gallery">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2 class="section-title">
+                    // SELECTED WORKS
+                </h2>
+
+                <p class="section-subtitle">
+                    A selection of moments captured by NI Studio.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="gallery-grid" id="galleryGrid">
+
+            <!-- IMAGE 01 -->
+
+            <div class="gallery-item" data-category="portrait">
+
+                <div class="gallery-img-wrapper">
+
+                    <img
+                        src="1.jpg"
+                        alt="NI Studio Portrait"
+                    >
+
+                </div>
+
+                <div class="gallery-details">
+
+                    <div class="item-info">
+
+                        <h3>
+                            Portrait Stories
+                        </h3>
+
+                    </div>
+
+                    <div class="camera-specs">
+                        SONY A1<br>
+                        1/1000s
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- IMAGE 02 -->
+
+            <div class="gallery-item" data-category="location">
+
+                <div class="gallery-img-wrapper">
+
+                    <img
+                        src="2.jpg"
+                        alt="NI Studio Product Photography"
+                    >
+
+                </div>
+
+                <div class="gallery-details">
+
+                    <div class="item-info">
+
+                        <h3>
+                            Product Editorial
+                        </h3>
+
+                    </div>
+
+                    <div class="camera-specs">
+                        HASSELBLAD<br>
+                        1/250s
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- IMAGE 03 -->
+
+            <div class="gallery-item" data-category="event">
+
+                <div class="gallery-img-wrapper">
+
+                    <img
+                        src="3.jpg"
+                        alt="NI Studio Event Photography"
+                    >
+
+                </div>
+
+                <div class="gallery-details">
+
+                    <div class="item-info">
+
+                        <h3>
+                            Event Energy
+                        </h3>
+
+                    </div>
+
+                    <div class="camera-specs">
+                        RED V-RAPTOR<br>
+                        1/4000s
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- IMAGE 04 -->
+
+            <div class="gallery-item" data-category="portrait">
+
+                <div class="gallery-img-wrapper">
+
+                    <img
+                        src="4.jpeg"
+                        alt="NI Studio Portrait"
+                    >
+
+                </div>
+
+                <div class="gallery-details">
+
+                    <div class="item-info">
+
+                        <h3>
+                            Modern Portraits
+                        </h3>
+
+                    </div>
+
+                    <div class="camera-specs">
+                        SONY A7R<br>
+                        1/800s
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- IMAGE 05 -->
+
+            <div class="gallery-item" data-category="location">
+
+                <div class="gallery-img-wrapper">
+
+                    <img
+                        src="5.jpg"
+                        alt="NI Studio Product Photography"
+                    >
+
+                </div>
+
+                <div class="gallery-details">
+
+                    <div class="item-info">
+
+                        <h3>
+                            Product Stories
+                        </h3>
+
+                    </div>
+
+                    <div class="camera-specs">
+                        CANON R5<br>
+                        1/500s
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- IMAGE 06 -->
+
+            <div class="gallery-item" data-category="event">
+
+                <div class="gallery-img-wrapper">
+
+                    <img
+                        src="6.jpg"
+                        alt="NI Studio Event"
+                    >
+
+                </div>
+
+                <div class="gallery-details">
+
+                    <div class="item-info">
+
+                        <h3>
+                            The Moment
+                        </h3>
+
+                    </div>
+
+                    <div class="camera-specs">
+                        SONY FX3<br>
+                        1/1000s
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         REELS — 2 VIDEOS
+    ========================= -->
+
+    <section class="reels-section" id="reels">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2 class="section-title">
+                    // REELS
+                </h2>
+
+                <p class="section-subtitle">
+                    Motion, atmosphere, and stories beyond the frame.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="reels-grid">
+
+            <!-- REEL 01 -->
+
+            <div class="reel-card">
+
+                <button
+                    class="fullscreen-btn"
+                    onclick="this.parentElement.querySelector('video').requestFullscreen()"
+                >
+                    ⛶
+                </button>
+
+                <video
+                        controls
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        webkit-playsinline
+                        preload="auto"
+                        poster="1.jpg"
+                        >
+                     <source
+                        src="1ST.mp4"
+                        type="video/mp4"
+                            >
+
+                        Your browser does not support video playback.
+                </video>
+
+                <div class="reel-overlay">
+
+                    <span>
+                        REEL 01
+                    </span>
+
+                    <h3>
+                        Behind The Frame
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- REEL 02 -->
+
+            <div class="reel-card">
+
+                <video
+                    controls
+                    autoplay
+                     muted
+                    loop
+                    playsinline
+                    webkit-playsinline
+                    preload="auto"
+                    poster="2.jpg"
+                    >
+                 <source
+                 src="2ND.mp4"
+                     type="video/mp4"
+                     >
+
+                        Your browser does not support video playback.
+                </video>
+
+                <button
+                    class="fullscreen-btn"
+                    onclick="this.parentElement.querySelector('video').requestFullscreen()"
+                >
+                    ⛶
+                </button>
+
+                <div class="reel-overlay">
+
+                    <span>
+                        REEL 02
+                    </span>
+
+                    <h3>
+                        A Moment In Motion
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         BEFORE / AFTER
+    ========================= -->
+
+    <section class="compare-section" id="compare">
+
+        <div class="compare-heading">
+
+            <h2 class="section-title">
+                // RETOUCHING & COLOR GRADING
+            </h2>
+
+            <p class="section-subtitle">
+                Drag the slider to explore the transformation
+                from original to final.
+            </p>
+
+        </div>
+
+
+        <div class="compare-container" id="compareContainer">
+
+            <div class="compare-img compare-before"></div>
+
+            <div
+                class="compare-img compare-after"
+                id="compareAfter"
+            ></div>
+
+            <div
+                class="compare-slider"
+                id="compareSlider"
+            >
+
+                <div class="compare-handle">
+                    ↔
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         STUDIO RATES
+    ========================= -->
+
+    <section class="studio-rates" id="rates">
+
+        <div class="rates-top">
+
+            <span>
+                // STUDIO MENU
+            </span>
+
+            <h2>
+                CHOOSE YOUR SETUP
+            </h2>
+
+            <div class="rates-flow">
+                SETUP <b>→</b> SPACE <b>→</b> BACKDROP <b>→</b> TIME
+            </div>
+
+        </div>
+
+
+        <div class="rates-board">
+
+            <div
+                class="rate-row"
+                data-service="Full Studio Access"
+                onclick="selectRate(this)"
+            >
+
+                <div class="rate-index">
+                    01
+                </div>
+
+                <div class="rate-content">
+
+                    <h3>
+                        FULL STUDIO ACCESS
+                    </h3>
+
+                    <p>
+                        ALL 4 STUDIO AREAS
+                    </p>
+
+                </div>
+
+                <div class="rate-value">
+
+                    <strong>
+                        1,500
+                    </strong>
+
+                    <span>
+                        EGP / HOUR
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="rate-row"
+                data-service="Room Area"
+                onclick="selectRate(this)"
+            >
+
+                <div class="rate-index">
+                    02
+                </div>
+
+                <div class="rate-content">
+
+                    <h3>
+                        ROOM AREA
+                    </h3>
+
+                    <p>
+                        DEDICATED ROOM
+                    </p>
+
+                </div>
+
+                <div class="rate-value">
+
+                    <strong>
+                        1,000
+                    </strong>
+
+                    <span>
+                        EGP / HOUR
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="rate-row"
+                data-service="Extra Backdrop"
+                onclick="selectRate(this)"
+            >
+
+                <div class="rate-index">
+                    03
+                </div>
+
+                <div class="rate-content">
+
+                    <h3>
+                        EXTRA BACKDROP
+                    </h3>
+
+                    <p>
+                        2 SIDES
+                    </p>
+
+                </div>
+
+                <div class="rate-value">
+
+                    <strong>
+                        1,000
+                    </strong>
+
+                    <span>
+                        EGP / SHOOT
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="rate-row"
+                data-service="Minimum Booking"
+                onclick="selectRate(this)"
+            >
+
+                <div class="rate-index">
+                    04
+                </div>
+
+                <div class="rate-content">
+
+                    <h3>
+                        MINIMUM BOOKING
+                    </h3>
+
+                    <p>
+                        REQUIRED SESSION TIME
+                    </p>
+
+                </div>
+
+                <div class="rate-value">
+
+                    <strong>
+                        3
+                    </strong>
+
+                    <span>
+                        HOURS MINIMUM
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         BOOKING
+    ========================= -->
+
+    <section class="booking-section" id="booking">
+
+        <div class="booking-wrap">
+
+            <div class="booking-intro">
+
+                <span class="booking-kicker">
+                    // RESERVE YOUR SESSION
+                </span>
+
+                <h2>
+                    Let's create
+                    something
+                    unforgettable.
+                </h2>
+
+                <p>
+                    Tell us a little about your project and
+                    we'll get back to you to confirm the details.
+                </p>
+
+                <p>...</p>
+
+                <div class="booking-note">
+
+                    <span class="note-dot"></span>
+
+                    <div>
+
+                        <span>
+                            Minimum booking: 3 hours.
+                        </span>
+
+                        <br>
+
+                        <span>
+                            50% deposit is required to confirm your booking.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <form
+                class="booking-form"
+                id="bookingForm"
+                action="https://formspree.io/f/xbgjwokl"
+                method="POST"
+            >
+
+                <div class="form-grid">
+
+                    <label>
+
+                        <span>
+                            Full Name
+                        </span>
+
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Your name"
+                            required
+                        >
+
+                    </label>
+
+
+                    <label>
+
+                        <span>
+                            Email
+                        </span>
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="you@example.com"
+                            required
+                        >
+
+                    </label>
+
+
+                    <label>
+
+                        <span>
+                            Phone
+                        </span>
+
+                        <input
+                            type="tel"
+                            name="phone"
+                            placeholder="+20"
+                            required
+                        >
+
+                    </label>
+
+
+                    <label>
+
+                        <span>
+                            Service
+                        </span>
+
+                        <select
+                            name="service"
+                            required
+                        >
+
+                            <option value="">
+                                Select a service
+                            </option>
+
+                            <option value="full-studio-access">
+                                Full Studio Access
+                            </option>
+
+                            <option value="room-area">
+                                Room Area
+                            </option>
+
+                            <option value="extra-backdrop">
+                                Extra Backdrop
+                            </option>
+
+                            <option value="minimum-booking">
+                                Minimum Booking
+                            </option>
+
+                        </select>
+
+                    </label>
+
+
+                    <label>
+
+                        <span>
+                            Preferred Date
+                        </span>
+
+                        <input
+                            type="date"
+                            name="date"
+                            required
+                        >
+
+                    </label>
+
+
+                    <label>
+
+                        <span>
+                            Preferred Time
+                        </span>
+
+                        <input
+                            type="time"
+                            name="time"
+                            required
+                        >
+
+                    </label>
+
+
+                    <label>
+
+                        <span>
+                            Duration (Hours)
+                        </span>
+
+                        <input
+                            type="number"
+                            name="duration"
+                            min="3"
+                            step="1"
+                            placeholder="e.g. 3"
+                            required
+                        >
+
+                    </label>
+
+
+                    <label class="full-field">
+
+                        <span>
+                            Tell us about your project
+                        </span>
+
+                        <textarea
+                            name="message"
+                            placeholder="Tell us what you have in mind..."
+                        ></textarea>
+
+                    </label>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="booking-submit"
+                >
+                    Send Booking Request
+                    <span>→</span>
+                </button>
+
+
+                <div
+                    class="form-success"
+                    id="formSuccess"
+                >
+
+                    ✓ BOOKING REQUEST SENT
+
+                    Thank you for choosing NI Studio.
+                    Your booking request has been successfully submitted.
+                    Our team will review your request and contact you shortly.
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer>
+
+        <div>
+            NI<span>.STUDIO</span>
+        </div>
+
+        <div>
+            Photography & Visual Stories
+        </div>
+
+        <a
+            href="https://www.instagram.com/ni__studio?stkn=cHJybG5iZXhuZXpr&utm_source=qr"
+            class="instagram-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="NI Studio on Instagram"
+            title="NI Studio on Instagram"
+        >
+
+            <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+
+                <rect
+                    x="3"
+                    y="3"
+                    width="18"
+                    height="18"
+                    rx="5"
+                    ry="5"
+                ></rect>
+
+                <circle
+                    cx="12"
+                    cy="12"
+                    r="4"
+                ></circle>
+
+                <circle
+                    cx="17.5"
+                    cy="6.5"
+                    r="1"
+                    fill="currentColor"
+                    stroke="none"
+                ></circle>
+
+            </svg>
+
+        </a>
+
+        <div>
+            © 2026 NI Studio
+        </div>
+
+    </footer>
+
+
+    <!-- =========================
+         LIGHTBOX
+    ========================= -->
+
+    <div class="lightbox" id="lightbox">
+
+        <button class="lightbox-close">
+            &times;
+        </button>
+
+        <button class="lightbox-prev">
+            &#10094;
+        </button>
+
+        <img src="" alt="">
+
+        <button class="lightbox-next">
+            &#10095;
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        /* =========================
+           GALLERY FILTER
+        ========================= */
+
+        const filterButtons =
+            document.querySelectorAll(".filter-btn");
+
+        const galleryItems =
+            document.querySelectorAll(".gallery-item");
+
+
+        filterButtons.forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                const filter =
+                    button.dataset.filter;
+
+
+                filterButtons.forEach(btn => {
+
+                    btn.classList.remove("active");
+
+                });
+
+
+                button.classList.add("active");
+
+
+                galleryItems.forEach(item => {
+
+                    const category =
+                        item.dataset.category;
+
+
+                    if (
+                        filter === "all" ||
+                        category === filter
+                    ) {
+
+                        item.style.display = "";
+
+                    } else {
+
+                        item.style.display = "none";
+
+                    }
+
+                });
+
+            });
+
+        });
+
+
+        /* =========================
+           BEFORE / AFTER SLIDER
+        ========================= */
+
+        const compareContainer =
+            document.getElementById("compareContainer");
+
+        const compareAfter =
+            document.getElementById("compareAfter");
+
+        const compareSlider =
+            document.getElementById("compareSlider");
+
+
+        let isSliding = false;
+
+
+        function updateSlider(x) {
+
+            const rect =
+                compareContainer.getBoundingClientRect();
+
+
+            let position =
+                x - rect.left;
+
+
+            position =
+                Math.max(
+                    0,
+                    Math.min(position, rect.width)
+                );
+
+
+            const percentage =
+                (position / rect.width) * 100;
+
+
+            compareAfter.style.width =
+                `${percentage}%`;
+
+
+            compareSlider.style.left =
+                `${percentage}%`;
+
+        }
+
+
+        compareContainer.addEventListener(
+            "mousedown",
+            (e) => {
+
+                isSliding = true;
+
+                updateSlider(e.clientX);
+
+            }
+        );
+
+
+        window.addEventListener(
+            "mouseup",
+            () => {
+
+                isSliding = false;
+
+            }
+        );
+
+
+        window.addEventListener(
+            "mousemove",
+            (e) => {
+
+                if (!isSliding) return;
+
+                updateSlider(e.clientX);
+
+            }
+        );
+
+
+        compareContainer.addEventListener(
+            "touchmove",
+            (e) => {
+
+                updateSlider(
+                    e.touches[0].clientX
+                );
+
+            }
+        );
+
+
+        /* =========================
+           BOOKING FORM
+        ========================= */
+
+        const bookingForm =
+            document.getElementById("bookingForm");
+
+        const formSuccess =
+            document.getElementById("formSuccess");
+
+
+        bookingForm.addEventListener(
+            "submit",
+            async (e) => {
+
+                e.preventDefault();
+
+                const response =
+                    await fetch(
+                        bookingForm.action,
+                        {
+                            method: "POST",
+                            body: new FormData(bookingForm),
+                            headers: {
+                                "Accept": "application/json"
+                            }
+                        }
+                    );
+
+
+                if (response.ok) {
+
+                    formSuccess.classList.add("show");
+
+                    bookingForm.reset();
+
+
+                    setTimeout(() => {
+
+                        formSuccess.classList.remove("show");
+
+                    }, 6000);
+
+                } else {
+
+                    alert(
+                        "Something went wrong. Please try again."
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================
+           SHUTTER BUTTON
+        ========================= */
+
+        const shutterBtn =
+            document.getElementById("shutterBtn");
+
+
+        shutterBtn.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .getElementById("booking")
+                    .scrollIntoView({
+                        behavior:"smooth"
+                    });
+
+            }
+        );
+
+
+        /* =========================
+           SIMPLE FPS DISPLAY
+        ========================= */
+
+        let frames = 0;
+        let lastTime = performance.now();
+
+
+        function updateFPS(time) {
+
+            frames++;
+
+
+            if (time - lastTime >= 1000) {
+
+                document
+                    .getElementById("fpsCounter")
+                    .textContent = frames;
+
+                frames = 0;
+                lastTime = time;
+
+            }
+
+
+            requestAnimationFrame(updateFPS);
+
+        }
+
+
+        requestAnimationFrame(updateFPS);
+
+
+        /* =========================
+           LIGHTBOX
+        ========================= */
+
+        const lightbox =
+            document.getElementById("lightbox");
+
+        const lightboxImg =
+            lightbox.querySelector("img");
+
+        const lightboxClose =
+            lightbox.querySelector(".lightbox-close");
+
+        const prevBtn =
+            document.querySelector(".lightbox-prev");
+
+        const nextBtn =
+            document.querySelector(".lightbox-next");
+
+        const galleryImages =
+            document.querySelectorAll(
+                ".gallery-img-wrapper img"
+            );
+
+
+        let currentImage = 0;
+
+
+        galleryImages.forEach((img, index) => {
+
+            img.addEventListener("click", () => {
+
+                currentImage = index;
+
+                lightboxImg.src = img.src;
+
+                lightboxImg.alt = img.alt;
+
+                lightbox.style.display = "flex";
+
+            });
+
+        });
+
+
+        lightboxClose.addEventListener(
+            "click",
+            () => {
+
+                lightbox.style.display = "none";
+
+            }
+        );
+
+
+        lightbox.addEventListener(
+            "click",
+            (e) => {
+
+                if (e.target === lightbox) {
+
+                    lightbox.style.display = "none";
+
+                }
+
+            }
+        );
+
+
+        prevBtn.addEventListener(
+            "click",
+            () => {
+
+                currentImage =
+                    (
+                        currentImage -
+                        1 +
+                        galleryImages.length
+                    ) %
+                    galleryImages.length;
+
+
+                lightboxImg.src =
+                    galleryImages[currentImage].src;
+
+                lightboxImg.alt =
+                    galleryImages[currentImage].alt;
+
+            }
+        );
+
+
+        nextBtn.addEventListener(
+            "click",
+            () => {
+
+                currentImage =
+                    (
+                        currentImage +
+                        1
+                    ) %
+                    galleryImages.length;
+
+
+                lightboxImg.src =
+                    galleryImages[currentImage].src;
+
+                lightboxImg.alt =
+                    galleryImages[currentImage].alt;
+
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            (e) => {
+
+                if (
+                    lightbox.style.display !== "flex"
+                ) return;
+
+
+                if (e.key === "Escape") {
+
+                    lightbox.style.display = "none";
+
+                }
+
+
+                if (e.key === "ArrowLeft") {
+
+                    prevBtn.click();
+
+                }
+
+
+                if (e.key === "ArrowRight") {
+
+                    nextBtn.click();
+
+                }
+
+            }
+        );
+
+
+        /* =========================
+           RATE SELECTION
+        ========================= */
+
+        function selectRate(rate) {
+
+            const service =
+                rate.dataset.service;
+
+            const booking =
+                document.getElementById("booking");
+
+            const serviceSelect =
+                document.querySelector(
+                    'select[name="service"]'
+                );
+
+
+            if (serviceSelect) {
+
+                serviceSelect.value =
+                    service
+                        .toLowerCase()
+                        .replaceAll(" ", "-");
+
+            }
+
+
+            booking.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        }
+
+
+        /* =========================
+           MOBILE VIDEO PREVIEW
+        ========================= */
+
+        const videos =
+            document.querySelectorAll(".reel-card video");
+
+
+        videos.forEach(video => {
+
+            const card =
+                video.closest(".reel-card");
+
+
+            const preview =
+                document.createElement("div");
+
+            preview.className =
+                "video-preview";
+
+
+            const canvas =
+                document.createElement("canvas");
+
+
+            const playButton =
+                document.createElement("button");
+
+
+            playButton.type = "button";
+
+            playButton.setAttribute(
+                "aria-label",
+                "Play video"
+            );
+
+            playButton.innerHTML = "▶";
+
+
+            preview.appendChild(canvas);
+
+            preview.appendChild(playButton);
+
+            card.insertBefore(
+                preview,
+                video
+            );
+
+
+            function createPreview() {
+
+                if (
+                    !video.videoWidth ||
+                    !video.videoHeight
+                ) {
+                    return;
+                }
+
+
+                canvas.width =
+                    video.videoWidth;
+
+                canvas.height =
+                    video.videoHeight;
+
+
+                const context =
+                    canvas.getContext("2d");
+
+
+                context.drawImage(
+                    video,
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+
+                preview.classList.add("ready");
+
+            }
+
+
+            video.addEventListener(
+                "loadeddata",
+                createPreview,
+                { once:true }
+            );
+
+
+            playButton.addEventListener(
+                "click",
+                () => {
+
+                    preview.classList.remove("ready");
+
+                    video.play();
+
+                }
+            );
+
+        });
+
+    </script>
+
+</body>
+</html>
+```
