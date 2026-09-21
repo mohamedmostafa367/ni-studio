@@ -1,0 +1,4115 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NI Studio // Photography & Visual Stories</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+>
+
+<style>
+
+:root {
+    --bg-color: #F3F6F1;
+    --surface-color: #E4EEE7;
+    --card-bg: #FFFFFF;
+
+    --text-color: #263832;
+    --text-muted: rgba(38, 56, 50, 0.68);
+
+    --accent-color: #F2946E;
+    --accent-glow: rgba(242, 148, 110, 0.30);
+
+    --sage-color: #8CAF97;
+    --soft-coral: #FBE4D8;
+
+    --border-color: rgba(38, 56, 50, 0.12);
+
+    --font-main: 'Work Sans', sans-serif;
+    --font-code: 'Poppins', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: auto !important;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+
+/* =========================================================
+   VIEWFINDER HUD
+========================================================= */
+
+.viewfinder-hud {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    padding: 25px;
+}
+
+.hud-corner {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border: 2px solid rgba(38,56,50,.13);
+}
+
+.top-left {
+    top: 20px;
+    left: 20px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.top-right {
+    top: 20px;
+    right: 20px;
+    border-left: none;
+    border-bottom: none;
+}
+
+.bottom-left {
+    bottom: 20px;
+    left: 20px;
+    border-right: none;
+    border-top: none;
+}
+
+.bottom-right {
+    bottom: 20px;
+    right: 20px;
+    border-left: none;
+    border-top: none;
+}
+
+.hud-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-code);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+}
+
+.hud-status:last-child {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    right: 25px;
+}
+
+.rec-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+.rec-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    animation: pulse-rec 1.2s infinite alternate;
+}
+
+@keyframes pulse-rec {
+
+    0% {
+        opacity: .2;
+        transform: scale(.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1.2);
+        box-shadow: 0 0 10px var(--accent-color);
+    }
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1001;
+    backdrop-filter: blur(10px);
+    background: rgba(243,246,241,.82);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.brand-logo {
+    font-family: var(--font-code);
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.brand-logo span {
+    color: var(--accent-color);
+}
+
+.nav-items {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+}
+
+.nav-link {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    transition: .3s ease;
+}
+
+.nav-link:hover {
+    color: var(--accent-color);
+}
+
+.darkroom-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-family: var(--font-main);
+    font-size: 13px;
+    transition: .4s ease;
+    text-decoration: none;
+}
+
+.darkroom-btn:hover {
+    border-color: var(--accent-color);
+    color: #fff;
+    background: var(--accent-color);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 110px 20px 40px;
+    overflow: hidden;
+}
+
+.hero-bg-media {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: .38;
+    filter: saturate(85%) brightness(.82);
+}
+
+.hero-bg-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+}
+
+.hero-title {
+    font-size: 4.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 25px;
+    background: linear-gradient(
+        180deg,
+        #263832 0%,
+        #52685E 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-desc {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    max-width: 650px;
+    margin: 0 auto 40px;
+    font-weight: 300;
+}
+
+
+/* =========================================================
+   FILTER BAR
+========================================================= */
+
+.modes-bar {
+    padding: 30px;
+    background: var(--surface-color);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 10;
+}
+
+.filter-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-family: var(--font-main);
+    font-size: 14px;
+    transition: .3s ease;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    background: var(--accent-color);
+    color: #fff;
+    font-weight: 700;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+
+/* =========================================================
+   GENERAL SECTIONS
+========================================================= */
+
+.gallery-section,
+.reels-section,
+.compare-section {
+    padding: 100px 50px;
+    position: relative;
+    z-index: 2;
+    background: var(--bg-color);
+}
+
+.section-header {
+    margin-bottom: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.section-title {
+    font-family: var(--font-code);
+    font-size: 2rem;
+    color: var(--text-color);
+    letter-spacing: 2px;
+}
+
+.section-subtitle {
+    color: var(--text-muted);
+    margin-top: 10px;
+}
+
+
+/* =========================================================
+   GALLERY
+========================================================= */
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(12,1fr);
+    grid-template-rows: repeat(4,220px);
+    gap: 8px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.gallery-item {
+    background: var(--card-bg);
+    overflow: hidden;
+    border: none;
+    transition: .5s cubic-bezier(.16,1,.3,1);
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+}
+
+.gallery-item:nth-child(1) {
+    grid-column: 1 / span 5;
+    grid-row: 1 / span 4;
+}
+
+.gallery-item:nth-child(2) {
+    grid-column: 6 / span 3;
+    grid-row: 1 / span 2;
+}
+
+.gallery-item:nth-child(3) {
+    grid-column: 9 / span 4;
+    grid-row: 1 / span 3;
+}
+
+.gallery-item:nth-child(4) {
+    grid-column: 6 / span 3;
+    grid-row: 3 / span 2;
+}
+
+.gallery-item:nth-child(5) {
+    grid-column: 9 / span 2;
+    grid-row: 4 / span 1;
+}
+
+.gallery-item:nth-child(6) {
+    grid-column: 11 / span 2;
+    grid-row: 4 / span 1;
+}
+
+.gallery-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(0,0,0,.16);
+    z-index: 5;
+}
+
+.gallery-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.gallery-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: .8s cubic-bezier(.16,1,.3,1);
+    cursor: pointer !important;
+    display: block;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.08);
+}
+
+.gallery-details {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 28px 22px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 15px;
+    background: linear-gradient(
+        transparent,
+        rgba(0,0,0,.78)
+    );
+    color: #fff;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: .45s ease;
+    pointer-events: none;
+}
+
+.gallery-item:hover .gallery-details {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.item-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 3px;
+}
+
+.camera-specs {
+    text-align: left;
+    font-family: var(--font-code);
+    font-size: .62rem;
+    color: rgba(255,255,255,.72);
+    border-left: 1px solid rgba(255,255,255,.3);
+    padding-left: 12px;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   REELS
+========================================================= */
+
+.reels-section {
+    background: var(--surface-color);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.reels-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 35px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.reel-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: visible;
+    background: #1d2925;
+    border: 1px solid var(--border-color);
+    min-height: 600px;
+}
+
+.reel-card video {
+    width: 100%;
+    height: 600px;
+    display: block;
+    object-fit: contain;
+}
+
+.reel-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 25px;
+    background: linear-gradient(
+        transparent,
+        rgba(0,0,0,.8)
+    );
+    color: #fff;
+}
+
+.reel-overlay span {
+    font-family: var(--font-code);
+    font-size: 11px;
+    color: var(--accent-color);
+    letter-spacing: 2px;
+}
+
+.reel-overlay h3 {
+    margin-top: 7px;
+    font-size: 1.4rem;
+}
+
+.fullscreen-btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 50%;
+    background: rgba(0,0,0,.55);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer !important;
+    z-index: 10;
+    backdrop-filter: blur(8px);
+    transition: .25s ease;
+}
+
+.fullscreen-btn:hover {
+    background: var(--accent-color);
+    transform: scale(1.08);
+}
+
+
+ /* =========================
+           BEFORE / AFTER
+        ========================= */
+
+        .compare-section {
+            background:var(--bg-color);
+        }
+
+        .compare-heading {
+            text-align:center;
+            max-width:600px;
+            margin:0 auto;
+        }
+
+        .compare-container {
+            position:relative;
+            max-width:1000px;
+            height:550px;
+            margin:40px auto 0;
+            border-radius:16px;
+            overflow:hidden;
+            border:1px solid var(--border-color);
+        }
+
+        .compare-img {
+            position:absolute;
+            inset:0;
+            background-size:contain;
+            background-position:center;
+        }
+
+        .compare-before {
+            background-image:url('77.jpg');
+            filter:grayscale(100%) contrast(90%);
+        }
+
+        .compare-after {
+            background-image:url('77.jpg');
+            width:50%;
+        }
+
+        .compare-slider {
+            position:absolute;
+            top:0;
+            bottom:0;
+            left:50%;
+            width:4px;
+            background:var(--accent-color);
+            transform:translateX(-50%);
+        }
+
+        .compare-handle {
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%,-50%);
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            background:var(--accent-color);
+            color:#fff;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:bold;
+            box-shadow:0 0 15px var(--accent-glow);
+        }
+
+/* =========================================================
+   CHOOSE YOUR SETUP
+========================================================= */
+
+.studio-rates {
+    padding: 120px 5%;
+    background: var(--bg-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.rates-top {
+    max-width: 1200px;
+    margin: 0 auto 55px;
+}
+
+.rates-top > span {
+    display: block;
+    color: var(--accent-color);
+    font-family: var(--font-code);
+    font-size: 11px;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+}
+
+.rates-top h2 {
+    margin: 0;
+    font-family: var(--font-code);
+    font-size: clamp(44px,7vw,88px);
+    line-height: .9;
+    letter-spacing: -3px;
+    color: var(--text-color);
+}
+
+.rates-flow {
+    margin-top: 25px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+}
+
+.rates-flow b {
+    color: var(--accent-color);
+    margin: 0 9px;
+}
+
+.setup-selector {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: .72fr 1.28fr;
+    gap: 22px;
+    align-items: stretch;
+}
+
+.setup-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+}
+
+.setup-option {
+    position: relative;
+    display: grid;
+    grid-template-columns: 45px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    min-height: 112px;
+    padding: 18px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-color);
+    text-align: left;
+    cursor: pointer !important;
+    transition:
+        background .35s ease,
+        border-color .35s ease,
+        transform .35s ease;
+}
+
+.setup-option:hover {
+    background: rgba(255,255,255,.68);
+    transform: translateX(4px);
+}
+
+.setup-option.active {
+    background: #fff;
+    border-color: var(--border-color);
+    box-shadow: 0 12px 30px rgba(38,56,50,.07);
+}
+
+.setup-option-number {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    font-family: var(--font-code);
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    transition: .35s ease;
+}
+
+.setup-option.active .setup-option-number {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+    box-shadow: 0 8px 18px var(--accent-glow);
+}
+
+.setup-option-info {
+    min-width: 0;
+}
+
+.setup-option-info h3 {
+    font-family: var(--font-code);
+    font-size: 15px;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.setup-option-info p {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.setup-option-price {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.setup-option-price strong {
+    display: block;
+    font-family: var(--font-code);
+    font-size: 18px;
+    line-height: 1;
+    color: var(--text-color);
+}
+
+.setup-option-price span {
+    display: block;
+    margin-top: 5px;
+    font-size: 8px;
+    letter-spacing: 1.3px;
+    color: var(--text-muted);
+}
+
+.setup-option-arrow {
+    position: absolute;
+    right: 18px;
+    bottom: 12px;
+    font-size: 11px;
+    color: var(--accent-color);
+    opacity: 0;
+    transform: translateX(-5px);
+    transition: .35s ease;
+}
+
+.setup-option.active .setup-option-arrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
+/* =========================================================
+   STAGE
+========================================================= */
+
+.setup-stage {
+    position: relative;
+    min-height: 540px;
+    overflow: hidden;
+    background: #1d2925;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 25px 70px rgba(38,56,50,.13);
+}
+
+.stage-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.035);
+    transition:
+        opacity .55s ease,
+        transform .9s cubic-bezier(.16,1,.3,1);
+    pointer-events: none;
+}
+
+.stage-slide.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+.stage-single-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: pointer !important;
+}
+
+.stage-slide::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(
+            to top,
+            rgba(0,0,0,.88) 0%,
+            rgba(0,0,0,.38) 34%,
+            rgba(0,0,0,.05) 68%,
+            transparent 100%
+        );
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   FULL STUDIO STAGE
+========================================================= */
+
+.stage-full-gallery {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-template-rows: repeat(2,1fr);
+    gap: 3px;
+}
+
+.stage-full-gallery .stage-area {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer !important;
+}
+
+.stage-full-gallery .stage-area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: pointer !important;
+    transition:
+        transform .9s
+        cubic-bezier(.16,1,.3,1);
+}
+
+.stage-slide.active
+.stage-full-gallery .stage-area:hover img {
+    transform: scale(1.06);
+}
+
+.stage-full-gallery .stage-area::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(38,56,50,.18);
+    transition: .4s ease;
+    pointer-events: none;
+}
+
+.stage-full-gallery
+.stage-area:hover::after {
+    background: rgba(38,56,50,0);
+}
+
+.stage-area-label {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    z-index: 3;
+    color: #fff;
+    font-family: var(--font-code);
+    font-size: 8px;
+    letter-spacing: 2px;
+    background: rgba(0,0,0,.42);
+    padding: 6px 9px;
+    backdrop-filter: blur(8px);
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   STAGE CONTENT
+========================================================= */
+
+.stage-topline {
+    position: absolute;
+    top: 22px;
+    left: 25px;
+    right: 25px;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+}
+
+.stage-index {
+    color: rgba(255,255,255,.82);
+    font-family: var(--font-code);
+    font-size: 10px;
+    letter-spacing: 2px;
+    background: rgba(0,0,0,.32);
+    border: 1px solid rgba(255,255,255,.24);
+    padding: 8px 11px;
+    backdrop-filter: blur(10px);
+}
+
+.stage-status {
+    color: #fff;
+    font-family: var(--font-code);
+    font-size: 8px;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.stage-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    box-shadow: 0 0 12px var(--accent-color);
+}
+
+.stage-content {
+    position: absolute;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+    z-index: 6;
+    color: #fff;
+}
+
+.stage-kicker {
+    display: block;
+    font-family: var(--font-code);
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--accent-color);
+    margin-bottom: 8px;
+}
+
+.stage-content h3 {
+    font-family: var(--font-code);
+    font-size: clamp(30px,4vw,52px);
+    line-height: .95;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+}
+
+.stage-description {
+    max-width: 530px;
+    font-size: 11px;
+    letter-spacing: 1.6px;
+    color: rgba(255,255,255,.72);
+    margin-bottom: 22px;
+}
+
+.stage-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.stage-price {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.stage-price strong {
+    font-family: var(--font-code);
+    font-size: clamp(30px,4vw,48px);
+    line-height: 1;
+}
+
+.stage-price span {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,.68);
+}
+
+.stage-book-btn {
+    border: none;
+    background: var(--accent-color);
+    color: #fff;
+    padding: 13px 20px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    cursor: pointer !important;
+    box-shadow: 0 10px 25px rgba(242,148,110,.25);
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+.stage-book-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(242,148,110,.35);
+}
+
+.stage-corner {
+    position: absolute;
+    z-index: 6;
+    width: 25px;
+    height: 25px;
+    border: 1px solid rgba(255,255,255,.3);
+    pointer-events: none;
+}
+
+.stage-corner.one {
+    top: 18px;
+    left: 18px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.stage-corner.two {
+    top: 18px;
+    right: 18px;
+    border-left: none;
+    border-bottom: none;
+}
+
+.stage-corner.three {
+    bottom: 18px;
+    left: 18px;
+    border-right: none;
+    border-top: none;
+}
+
+.stage-corner.four {
+    bottom: 18px;
+    right: 18px;
+    border-left: none;
+    border-top: none;
+}
+
+
+/* =========================================================
+   BOOKING
+========================================================= */
+
+.booking-section {
+    padding: 110px 50px;
+    background:
+        linear-gradient(
+            135deg,
+            var(--surface-color) 0%,
+            var(--bg-color) 55%,
+            var(--soft-coral) 150%
+        );
+    border-top: 1px solid var(--border-color);
+}
+
+.booking-wrap {
+    max-width: 1180px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: .8fr 1.2fr;
+    gap: 70px;
+    align-items: start;
+}
+
+.booking-intro {
+    padding-top: 8px;
+}
+
+.booking-kicker {
+    font-family: var(--font-code);
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+.booking-intro h2 {
+    font-family: var(--font-code);
+    font-size: clamp(2.6rem,5vw,4.5rem);
+    line-height: 1;
+    margin: 18px 0 22px;
+}
+
+.booking-intro p {
+    max-width: 420px;
+    color: var(--text-muted);
+}
+
+.booking-note {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 32px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.note-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--sage-color);
+    box-shadow: 0 0 0 6px rgba(140,175,151,.16);
+}
+
+.booking-form {
+    background: rgba(255,255,255,.76);
+    border: 1px solid var(--border-color);
+    border-radius: 28px;
+    padding: 32px;
+    box-shadow: 0 18px 50px rgba(38,56,50,.08);
+    backdrop-filter: blur(8px);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 18px;
+}
+
+.booking-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.booking-form label span {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.booking-form input,
+.booking-form select,
+.booking-form textarea {
+    width: 100%;
+    border: 1px solid rgba(38,56,50,.12);
+    background: rgba(243,246,241,.78);
+    color: var(--text-color);
+    border-radius: 15px;
+    padding: 13px 14px;
+    font: inherit;
+    outline: none;
+    transition: .25s ease;
+}
+
+.booking-form textarea {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.booking-form input:focus,
+.booking-form select:focus,
+.booking-form textarea:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+    background: #fff;
+}
+
+.full-field {
+    grid-column: 1 / -1;
+}
+
+.booking-submit {
+    margin-top: 20px;
+    width: 100%;
+    border: none;
+    border-radius: 999px;
+    padding: 15px 20px;
+    background: var(--text-color);
+    color: #fff;
+    font: 600 14px var(--font-main);
+    transition: .25s ease;
+}
+
+.booking-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(38,56,50,.15);
+}
+
+.form-success {
+    display: none;
+    margin-top: 14px;
+    text-align: center;
+    color: #4D745A;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.form-success.show {
+    display: block;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+    padding: 40px 50px;
+    background: var(--text-color);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+footer span {
+    color: var(--accent-color);
+}
+
+
+/* =========================================================
+   INSTAGRAM
+========================================================= */
+
+.instagram-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 50%;
+    color: #fff;
+    text-decoration: none;
+    transition: .35s ease;
+}
+
+.instagram-link svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: .35s ease;
+}
+
+.instagram-link:hover {
+    color: #fff;
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px var(--accent-glow);
+}
+
+.instagram-link:hover svg {
+    transform: scale(1.08);
+}
+
+
+/* =========================================================
+   LIGHTBOX
+========================================================= */
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 30px;
+}
+
+.lightbox img {
+    max-width: 95%;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 40px;
+    cursor: pointer !important;
+    z-index: 5;
+}
+
+.lightbox-prev,
+.lightbox-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,.4);
+    border: 1px solid rgba(255,255,255,.2);
+    color: #fff;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer !important;
+    z-index: 2;
+}
+
+.lightbox-prev {
+    left: 25px;
+}
+
+.lightbox-next {
+    right: 25px;
+}
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+    background: var(--accent-color);
+}
+
+
+/* =========================================================
+   MOBILE VIDEO PREVIEW
+========================================================= */
+
+.video-preview {
+    position: absolute;
+    inset: 0;
+    display: none;
+    z-index: 5;
+    background: #1d2925;
+}
+
+.video-preview.ready {
+    display: none;
+}
+
+.video-preview canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.video-preview button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 68px;
+    height: 68px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(242,148,110,.95);
+    color: #fff;
+    font-size: 25px;
+    cursor: pointer !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,.28);
+    transition: .25s ease;
+}
+
+.video-preview button:hover {
+    transform: translate(-50%,-50%) scale(1.08);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:900px) {
+
+    .site-header {
+        padding: 20px;
+    }
+
+    .nav-items {
+        gap: 12px;
+    }
+
+    .nav-link {
+        display: none;
+    }
+
+    .hero-title,
+    .hero-desc {
+        display: none;
+    }
+
+    .gallery-section,
+    .reels-section,
+    .compare-section,
+    .booking-section {
+        padding: 70px 20px;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2,1fr);
+        grid-template-rows: repeat(6,190px);
+        gap: 6px;
+    }
+
+    .gallery-item:nth-child(1) {
+        grid-column: 1 / span 2;
+        grid-row: 1 / span 2;
+    }
+
+    .gallery-item:nth-child(2) {
+        grid-column: 1;
+        grid-row: 3 / span 2;
+    }
+
+    .gallery-item:nth-child(3) {
+        grid-column: 2;
+        grid-row: 3 / span 2;
+    }
+
+    .gallery-item:nth-child(4) {
+        grid-column: 1 / span 2;
+        grid-row: 5;
+    }
+
+    .gallery-item:nth-child(5) {
+        grid-column: 1;
+        grid-row: 6;
+    }
+
+    .gallery-item:nth-child(6) {
+        grid-column: 2;
+        grid-row: 6;
+    }
+
+    .gallery-details {
+        opacity: 1;
+        transform: none;
+        padding: 20px 14px 14px;
+    }
+
+    .item-info h3 {
+        font-size: .9rem;
+    }
+
+    .camera-specs {
+        display: none;
+    }
+
+    .reels-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reel-card,
+    .reel-card video {
+        min-height: 520px;
+        height: 520px;
+    }
+
+    .video-preview.ready {
+        display: block;
+    }
+
+    .video-preview button {
+        width: 62px;
+        height: 62px;
+        font-size: 22px;
+    }
+
+    .booking-wrap {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+
+    .booking-form {
+        padding: 22px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full-field {
+        grid-column: auto;
+    }
+
+    .compare-workspace {
+        margin-top: 35px;
+    }
+
+    .compare-container {
+        height: 430px;
+        min-height: 430px;
+    }
+
+    .compare-label {
+        top: 16px;
+        padding: 7px 9px;
+        font-size: 8px;
+    }
+
+    .compare-label.before {
+        left: 16px;
+    }
+
+    .compare-label.after {
+        right: 16px;
+    }
+
+    .compare-handle {
+        width: 50px;
+        height: 50px;
+        font-size: 17px;
+    }
+
+    .retouch-workflow {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .workflow-step {
+        min-height: 54px;
+        padding: 14px;
+    }
+
+    .workflow-step:nth-child(2) {
+        border-right: none;
+    }
+
+    .workflow-step:nth-child(-n+2) {
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .hud-status {
+        font-size: 8px;
+    }
+
+    .hud-status div:nth-child(2) {
+        display: none;
+    }
+
+    footer {
+        padding: 30px 20px;
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .lightbox-prev {
+        left: 10px;
+    }
+
+    .lightbox-next {
+        right: 10px;
+    }
+
+    .studio-rates {
+        padding: 80px 20px;
+    }
+
+    .setup-selector {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .setup-stage {
+        min-height: 500px;
+        order: 1;
+    }
+
+    .setup-list {
+        order: 2;
+        padding: 5px;
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        gap: 5px;
+    }
+
+    .setup-option {
+        grid-template-columns: 34px 1fr;
+        gap: 10px;
+        min-height: 105px;
+        padding: 13px;
+    }
+
+    .setup-option-number {
+        width: 34px;
+        height: 34px;
+    }
+
+    .setup-option-price {
+        grid-column: 2;
+        text-align: left;
+    }
+
+    .setup-option-price strong {
+        font-size: 15px;
+    }
+
+    .setup-option-price span {
+        display: inline;
+        margin-left: 5px;
+    }
+
+    .setup-option-arrow {
+        right: 10px;
+        bottom: 9px;
+    }
+
+}
+
+
+@media(max-width:700px) {
+
+    .rates-top h2 {
+        letter-spacing: -2px;
+    }
+
+    .stage-content {
+        left: 20px;
+        right: 20px;
+        bottom: 22px;
+    }
+
+    .stage-content h3 {
+        font-size: 34px;
+    }
+
+    .stage-description {
+        font-size: 9px;
+        margin-bottom: 17px;
+    }
+
+    .stage-bottom {
+        align-items: flex-end;
+    }
+
+    .stage-price {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3px;
+    }
+
+    .stage-price strong {
+        font-size: 32px;
+    }
+
+    .stage-book-btn {
+        padding: 11px 14px;
+        font-size: 9px;
+    }
+
+    .compare-container {
+        height: 390px;
+        min-height: 390px;
+    }
+
+    .compare-heading .section-title {
+        line-height: 1.2;
+    }
+
+}
+
+
+@media(max-width:480px) {
+
+    .stage-topline {
+        top: 16px;
+        left: 18px;
+        right: 18px;
+    }
+
+    .stage-index {
+        font-size: 8px;
+        padding: 7px 8px;
+    }
+
+    .stage-status {
+        font-size: 7px;
+    }
+
+    .stage-content h3 {
+        font-size: 29px;
+    }
+
+    .stage-description {
+        letter-spacing: 1px;
+    }
+
+    .setup-list {
+        grid-template-columns: 1fr;
+    }
+
+    .setup-option {
+        grid-template-columns: 38px 1fr auto;
+        min-height: 88px;
+    }
+
+    .setup-option-price {
+        grid-column: auto;
+        text-align: right;
+    }
+
+    .setup-option-price span {
+        display: block;
+        margin-left: 0;
+    }
+
+    .setup-option-arrow {
+        display: none;
+    }
+
+    .stage-full-gallery {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .stage-area-label {
+        left: 8px;
+        top: 8px;
+        font-size: 7px;
+        padding: 5px 6px;
+    }
+
+    .compare-container {
+        height: 330px;
+        min-height: 330px;
+    }
+
+    .compare-label {
+        font-size: 7px;
+        letter-spacing: 1.5px;
+    }
+
+    .compare-handle {
+        width: 46px;
+        height: 46px;
+    }
+
+    .retouch-workflow {
+        grid-template-columns: 1fr;
+    }
+
+    .workflow-step {
+        border-right: none !important;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .workflow-step:last-child {
+        border-bottom: none;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- VIEWFINDER HUD -->
+
+<div class="viewfinder-hud">
+
+```
+<div class="hud-corner top-left"></div>
+<div class="hud-corner top-right"></div>
+<div class="hud-corner bottom-left"></div>
+<div class="hud-corner bottom-right"></div>
+
+<div class="hud-status">
+
+   
+
+</div>
+
+<
+```
+
+</div>
+
+<!-- HEADER -->
+
+<header class="site-header">
+
+```
+<a href="#" class="brand-logo">
+    NI<span>.STUDIO</span>
+</a>
+
+<nav class="nav-items">
+
+    <a href="#gallery" class="nav-link">
+        Portfolio
+    </a>
+
+    <a href="#reels" class="nav-link">
+        Reels
+    </a>
+
+    <a href="#compare" class="nav-link">
+        Retouching
+    </a>
+
+    <a href="#rates" class="nav-link">
+        Studio
+    </a>
+
+    <a href="#booking" class="darkroom-btn">
+        Book Now
+    </a>
+
+</nav>
+```
+
+</header>
+
+<!-- HERO -->
+
+<section class="hero">
+
+```
+<div class="hero-bg-media">
+
+    <img
+        src="home.jpeg"
+        alt="NI Studio"
+    >
+
+</div>
+
+<div class="hero-content">
+
+    <h1 class="hero-title">
+        NI.Studio<br>
+        
+    </h1>
+
+    <p class="hero-desc">
+        Portraits, events, and product stories
+        crafted with a warm,
+        modern visual style.
+    </p>
+
+</div>
+```
+
+</section>
+
+<!-- FILTER BAR -->
+
+<div class="modes-bar">
+
+```
+<button class="filter-btn active" data-filter="all">
+    All Work
+</button>
+
+<button class="filter-btn" data-filter="portrait">
+    Portraits
+</button>
+
+<button class="filter-btn" data-filter="location">
+    Locations
+</button>
+
+<button class="filter-btn" data-filter="event">
+    Events
+</button>
+```
+
+</div>
+
+<!-- GALLERY -->
+
+<section class="gallery-section" id="gallery">
+
+```
+<div class="section-header">
+
+    <div>
+
+        <h2 class="section-title">
+            // SELECTED WORKS
+        </h2>
+
+        <p class="section-subtitle">
+            A selection of moments
+            captured by NI Studio.
+        </p>
+
+    </div>
+
+</div>
+
+<div class="gallery-grid" id="galleryGrid">
+
+    <div class="gallery-item" data-category="portrait">
+
+        <div class="gallery-img-wrapper">
+
+            <img
+                src="1.jpg"
+                alt="NI Studio Portrait"
+            >
+
+        </div>
+
+        <div class="gallery-details">
+
+            <div class="item-info">
+                <h3>Portrait Stories</h3>
+            </div>
+
+            <div class="camera-specs">
+                SONY A1<br>
+                1/1000s
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="gallery-item" data-category="location">
+
+        <div class="gallery-img-wrapper">
+
+            <img
+                src="3.jpg"
+                alt="NI Studio Product Photography"
+            >
+
+        </div>
+
+        <div class="gallery-details">
+
+            <div class="item-info">
+                <h3>Product Editorial</h3>
+            </div>
+
+            <div class="camera-specs">
+                HASSELBLAD<br>
+                1/250s
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="gallery-item" data-category="event">
+
+        <div class="gallery-img-wrapper">
+
+            <img
+                src="6.jpeg"
+                alt="NI Studio Event Photography"
+            >
+
+        </div>
+
+        <div class="gallery-details">
+
+            <div class="item-info">
+                <h3>Event Energy</h3>
+            </div>
+
+            <div class="camera-specs">
+                RED V-RAPTOR<br>
+                1/4000s
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="gallery-item" data-category="portrait">
+
+        <div class="gallery-img-wrapper">
+
+            <img
+                src="7.jpg"
+                alt="NI Studio Portrait"
+            >
+
+        </div>
+
+        <div class="gallery-details">
+
+            <div class="item-info">
+                <h3>Modern Portraits</h3>
+            </div>
+
+            <div class="camera-specs">
+                SONY A7R<br>
+                1/800s
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="gallery-item" data-category="location">
+
+        <div class="gallery-img-wrapper">
+
+            <img
+                src="5.jpg"
+                alt="NI Studio Product Photography"
+            >
+
+        </div>
+
+        <div class="gallery-details">
+
+            <div class="item-info">
+                <h3>Product Stories</h3>
+            </div>
+
+            <div class="camera-specs">
+                CANON R5<br>
+                1/500s
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="gallery-item" data-category="event">
+
+        <div class="gallery-img-wrapper">
+
+            <img
+                src="4.jpeg"
+                alt="NI Studio Event"
+            >
+
+        </div>
+
+        <div class="gallery-details">
+
+            <div class="item-info">
+                <h3>The Moment</h3>
+            </div>
+
+            <div class="camera-specs">
+                SONY FX3<br>
+                1/1000s
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</section>
+
+<!-- REELS -->
+
+<section class="reels-section" id="reels">
+
+```
+<div class="section-header">
+
+    <div>
+
+        <h2 class="section-title">
+            // REELS
+        </h2>
+
+        <p class="section-subtitle">
+            Motion, atmosphere,
+            and stories beyond the frame.
+        </p>
+
+    </div>
+
+</div>
+
+<div class="reels-grid">
+
+    <div class="reel-card">
+
+        <button
+            class="fullscreen-btn"
+            onclick="
+                this.parentElement
+                .querySelector('video')
+                .requestFullscreen()
+            "
+        >
+            ⛶
+        </button>
+
+        <video
+            controls
+            autoplay
+            muted
+            loop
+            playsinline
+            webkit-playsinline
+            preload="auto"
+            poster="1.jpg"
+        >
+
+            <source
+                src="1ST.mp4"
+                type="video/mp4"
+            >
+
+            Your browser does not support
+            video playback.
+
+        </video>
+
+        <div class="reel-overlay">
+
+            <span>REEL 01</span>
+
+            <h3>
+                Behind The Frame
+            </h3>
+
+        </div>
+
+    </div>
+
+
+    <div class="reel-card">
+
+        <video
+            controls
+            autoplay
+            muted
+            loop
+            playsinline
+            webkit-playsinline
+            preload="auto"
+            poster="2.jpg"
+        >
+
+            <source
+                src="2ND.mp4"
+                type="video/mp4"
+            >
+
+            Your browser does not support
+            video playback.
+
+        </video>
+
+        <button
+            class="fullscreen-btn"
+            onclick="
+                this.parentElement
+                .querySelector('video')
+                .requestFullscreen()
+            "
+        >
+            ⛶
+        </button>
+
+        <div class="reel-overlay">
+
+            <span>REEL 02</span>
+
+            <h3>
+                A Moment In Motion
+            </h3>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</section>
+
+ <!-- =========================
+         BEFORE / AFTER
+    ========================= -->
+
+    <section class="compare-section" id="compare">
+
+        <div class="compare-heading">
+
+            <h2 class="section-title">
+                // RETOUCHING & COLOR GRADING
+            </h2>
+
+            <p class="section-subtitle">
+                Drag the slider to explore the transformation
+                from original to final.
+            </p>
+
+        </div>
+
+
+        <div class="compare-container" id="compareContainer">
+
+            <div class="compare-img compare-before"></div>
+
+            <div
+                class="compare-img compare-after"
+                id="compareAfter"
+            ></div>
+
+            <div
+                class="compare-slider"
+                id="compareSlider"
+            >
+
+                <div class="compare-handle">
+                    ↔
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+<!-- CHOOSE YOUR SETUP -->
+
+<section class="studio-rates" id="rates">
+
+```
+<div class="rates-top">
+
+    <span>
+        // STUDIO MENU
+    </span>
+
+    <h2>
+        CHOOSE YOUR SETUP
+    </h2>
+
+    <div class="rates-flow">
+
+        SPACE
+        <b>→</b>
+        SETUP
+        <b>→</b>
+        TIME
+
+    </div>
+
+</div>
+
+
+<div class="setup-selector">
+
+
+    <!-- SETUP OPTIONS -->
+
+    <div class="setup-list">
+
+
+        <!-- FULL STUDIO -->
+
+        <button
+            type="button"
+            class="setup-option active"
+            data-setup="full-studio"
+        >
+
+            <span class="setup-option-number">
+                01
+            </span>
+
+            <span class="setup-option-info">
+
+                <h3>
+                    FULL STUDIO
+                </h3>
+
+                <p>
+                    AREA 01 · AREA 02 · AREA 03 · CYCLORAMA
+                </p>
+
+            </span>
+
+            <span class="setup-option-price">
+
+                <strong>
+                    1,500
+                </strong>
+
+                <span>
+                    EGP / HOUR
+                </span>
+
+            </span>
+
+            <span class="setup-option-arrow">
+                VIEW →
+            </span>
+
+        </button>
+
+
+        <!-- ROOM -->
+
+        <button
+            type="button"
+            class="setup-option"
+            data-setup="room-area"
+        >
+
+            <span class="setup-option-number">
+                02
+            </span>
+
+            <span class="setup-option-info">
+
+                <h3>
+                    ROOM AREA
+                </h3>
+
+                <p>
+                    DEDICATED SHOOTING AREA
+                </p>
+
+            </span>
+
+            <span class="setup-option-price">
+
+                <strong>
+                    1,000
+                </strong>
+
+                <span>
+                    EGP / HOUR
+                </span>
+
+            </span>
+
+            <span class="setup-option-arrow">
+                VIEW →
+            </span>
+
+        </button>
+
+
+        <!-- CYCLORAMA -->
+
+        <button
+            type="button"
+            class="setup-option"
+            data-setup="cyclorama"
+        >
+
+            <span class="setup-option-number">
+                03
+            </span>
+
+            <span class="setup-option-info">
+
+                <h3>
+                    CYCLORAMA
+                </h3>
+
+                <p>
+                    CLEAN BACKDROP · FULL CONTROL
+                </p>
+
+            </span>
+
+            <span class="setup-option-price">
+
+                <strong>
+                    800
+                </strong>
+
+                <span>
+                    EGP / HOUR
+                </span>
+
+            </span>
+
+            <span class="setup-option-arrow">
+                VIEW →
+            </span>
+
+        </button>
+
+
+        <!-- EXTRA SETUPS -->
+
+        <button
+            type="button"
+            class="setup-option"
+            data-setup="extra-setups"
+        >
+
+            <span class="setup-option-number">
+                04
+            </span>
+
+            <span class="setup-option-info">
+
+                <h3>
+                    EXTRA SETUPS
+                </h3>
+
+                <p>
+                    CUSTOM SETUP · PER SHOT
+                </p>
+
+            </span>
+
+            <span class="setup-option-price">
+
+                <strong>
+                    1,000
+                </strong>
+
+                <span>
+                    EGP / SHOT
+                </span>
+
+            </span>
+
+            <span class="setup-option-arrow">
+                VIEW →
+            </span>
+
+        </button>
+
+    </div>
+
+
+    <!-- VISUAL STAGE -->
+
+    <div
+        class="setup-stage"
+        id="setupStage"
+    >
+
+        <span class="stage-corner one"></span>
+        <span class="stage-corner two"></span>
+        <span class="stage-corner three"></span>
+        <span class="stage-corner four"></span>
+
+
+        <!-- FULL STUDIO -->
+
+        <div
+            class="stage-slide active"
+            data-stage="full-studio"
+        >
+
+            <div class="stage-full-gallery">
+
+
+                <!-- FULL ACCESS -->
+
+                <div class="stage-area setup-click-image">
+
+                    <img
+                        src="area1.jpeg"
+                        alt="NI Studio Full Studio Access"
+                    >
+
+                    <span class="stage-area-label">
+                        FULL ACCESS
+                    </span>
+
+                </div>
+
+
+                <!-- AREA 01 -->
+
+                <div class="stage-area setup-click-image">
+
+                    <img
+                        src="area2.jpeg"
+                        alt="NI Studio Area 01"
+                    >
+
+                    <span class="stage-area-label">
+                        AREA 01
+                    </span>
+
+                </div>
+
+
+                <!-- AREA 02 -->
+
+                <div class="stage-area setup-click-image">
+
+                    <img
+                        src="Area 3333.jpeg"
+                        alt="NI Studio Area 02"
+                    >
+
+                    <span class="stage-area-label">
+                        AREA 02
+                    </span>
+
+                </div>
+
+
+                <!-- AREA 03 -->
+
+                <div class="stage-area setup-click-image">
+
+                    <img
+                        src="cyco.jpeg"
+                        alt="NI Studio Area 03"
+                    >
+
+                    <span class="stage-area-label">
+                        AREA 03
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="stage-topline">
+
+                <span class="stage-index">
+                    SETUP 01 / 04
+                </span>
+
+                <span class="stage-status">
+
+                    <span class="stage-status-dot"></span>
+
+                    AVAILABLE SETUP
+
+                </span>
+
+            </div>
+
+
+            <div class="stage-content">
+
+                <span class="stage-kicker">
+                    COMPLETE ACCESS
+                </span>
+
+                <h3>
+                    FULL STUDIO
+                </h3>
+
+                <p class="stage-description">
+
+                    Access to Area 01, Area 02,
+                    Area 03 and the Cyclorama
+                    within one studio session.
+
+                </p>
+
+                <div class="stage-bottom">
+
+                    <div class="stage-price">
+
+                        <strong>
+                            1,500
+                        </strong>
+
+                        <span>
+                            EGP / HOUR
+                        </span>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="stage-book-btn"
+                        data-book-setup="full-studio"
+                    >
+                        SELECT & BOOK →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ROOM AREA -->
+
+        <div
+            class="stage-slide"
+            data-stage="room-area"
+        >
+
+            <img
+                class="stage-single-image setup-click-image"
+                src="room area.jpeg"
+                alt="NI Studio Room Area"
+            >
+
+            <div class="stage-topline">
+
+                <span class="stage-index">
+                    SETUP 02 / 04
+                </span>
+
+                <span class="stage-status">
+
+                    <span class="stage-status-dot"></span>
+
+                    AVAILABLE SETUP
+
+                </span>
+
+            </div>
+
+            <div class="stage-content">
+
+                <span class="stage-kicker">
+                    DEDICATED SPACE
+                </span>
+
+                <h3>
+                    ROOM AREA
+                </h3>
+
+                <p class="stage-description">
+
+                    A dedicated shooting area
+                    for focused sessions,
+                    portraits and controlled setups.
+
+                </p>
+
+                <div class="stage-bottom">
+
+                    <div class="stage-price">
+
+                        <strong>
+                            1,000
+                        </strong>
+
+                        <span>
+                            EGP / HOUR
+                        </span>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="stage-book-btn"
+                        data-book-setup="room-area"
+                    >
+                        SELECT & BOOK →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CYCLORAMA -->
+
+        <div
+            class="stage-slide"
+            data-stage="cyclorama"
+        >
+
+            <img
+                class="stage-single-image setup-click-image"
+                src="cyco.jpeg"
+                alt="NI Studio Cyclorama"
+            >
+
+            <div class="stage-topline">
+
+                <span class="stage-index">
+                    SETUP 03 / 04
+                </span>
+
+                <span class="stage-status">
+
+                    <span class="stage-status-dot"></span>
+
+                    AVAILABLE SETUP
+
+                </span>
+
+            </div>
+
+            <div class="stage-content">
+
+                <span class="stage-kicker">
+                    CLEAN BACKDROP
+                </span>
+
+                <h3>
+                    CYCLORAMA
+                </h3>
+
+                <p class="stage-description">
+
+                    A clean continuous backdrop
+                    designed for controlled,
+                    minimal and cinematic shoots.
+
+                </p>
+
+                <div class="stage-bottom">
+
+                    <div class="stage-price">
+
+                        <strong>
+                            800
+                        </strong>
+
+                        <span>
+                            EGP / HOUR
+                        </span>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="stage-book-btn"
+                        data-book-setup="cyclorama"
+                    >
+                        SELECT & BOOK →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- EXTRA SETUPS -->
+
+        <div
+            class="stage-slide"
+            data-stage="extra-setups"
+        >
+
+            <img
+                class="stage-single-image setup-click-image"
+                src="extra setups.jpeg"
+                alt="NI Studio Extra Setups"
+            >
+
+            <div class="stage-topline">
+
+                <span class="stage-index">
+                    SETUP 04 / 04
+                </span>
+
+                <span class="stage-status">
+
+                    <span class="stage-status-dot"></span>
+
+                    AVAILABLE SETUP
+
+                </span>
+
+            </div>
+
+            <div class="stage-content">
+
+                <span class="stage-kicker">
+                    CUSTOM CREATIVE
+                </span>
+
+                <h3>
+                    EXTRA SETUPS
+                </h3>
+
+                <p class="stage-description">
+
+                    Custom setup options created
+                    around the visual direction
+                    of your specific shoot.
+
+                </p>
+
+                <div class="stage-bottom">
+
+                    <div class="stage-price">
+
+                        <strong>
+                            1,000
+                        </strong>
+
+                        <span>
+                            EGP / SHOT
+                        </span>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="stage-book-btn"
+                        data-book-setup="extra-setups"
+                    >
+                        SELECT & BOOK →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</section>
+
+<!-- BOOKING -->
+
+<section class="booking-section" id="booking">
+
+```
+<div class="booking-wrap">
+
+    <div class="booking-intro">
+
+        <span class="booking-kicker">
+            // RESERVE YOUR SESSION
+        </span>
+
+        <h2>
+            Let's create
+            something
+            unforgettable.
+        </h2>
+
+        <p>
+            Tell us a little about your
+            project and we'll get back to you
+            to confirm the details.
+        </p>
+
+        <div class="booking-note">
+
+            <span class="note-dot"></span>
+
+            <div>
+
+                <span>
+                    Minimum booking: 3 hours.
+                </span>
+
+                <br>
+
+                <span>
+                    50% deposit is required
+                    to confirm your booking.
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <form
+        class="booking-form"
+        id="bookingForm"
+        action="https://formspree.io/f/xbgjwokl"
+        method="POST"
+    >
+
+        <div class="form-grid">
+
+            <label>
+
+                <span>
+                    Full Name
+                </span>
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Your name"
+                    required
+                >
+
+            </label>
+
+
+            <label>
+
+                <span>
+                    Email
+                </span>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    required
+                >
+
+            </label>
+
+
+            <label>
+
+                <span>
+                    Phone
+                </span>
+
+                <input
+                    type="tel"
+                    name="phone"
+                    placeholder="+20"
+                    required
+                >
+
+            </label>
+
+
+            <label>
+
+                <span>
+                    Setup
+                </span>
+
+                <select
+                    name="service"
+                    required
+                >
+
+                    <option value="">
+                        Select a setup
+                    </option>
+
+                    <option value="full-studio-access">
+                        Full Studio
+                    </option>
+
+                    <option value="room-area">
+                        Room Area
+                    </option>
+
+                    <option value="cyclorama">
+                        Cyclorama
+                    </option>
+
+                    <option value="extra-setups">
+                        Extra Setups
+                    </option>
+
+                </select>
+
+            </label>
+
+
+            <label>
+
+                <span>
+                    Preferred Date
+                </span>
+
+                <input
+                    type="date"
+                    name="date"
+                    required
+                >
+
+            </label>
+
+
+            <label>
+
+                <span>
+                    Preferred Time
+                </span>
+
+                <input
+                    type="time"
+                    name="time"
+                    required
+                >
+
+            </label>
+
+
+            <label>
+
+                <span>
+                    Duration (Hours)
+                </span>
+
+                <input
+                    type="number"
+                    name="duration"
+                    min="3"
+                    step="1"
+                    placeholder="e.g. 3"
+                    required
+                >
+
+            </label>
+
+
+            <label class="full-field">
+
+                <span>
+                    Tell us about your project
+                </span>
+
+                <textarea
+                    name="message"
+                    placeholder="Tell us what you have in mind..."
+                ></textarea>
+
+            </label>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="booking-submit"
+        >
+
+            Send Booking Request
+
+            <span>
+                →
+            </span>
+
+        </button>
+
+
+        <div
+            class="form-success"
+            id="formSuccess"
+        >
+
+            ✓ BOOKING REQUEST SENT
+
+            <br>
+
+            Thank you for choosing NI Studio.
+            Your booking request has been
+            successfully submitted.
+
+            <br>
+
+            Our team will review the request
+            and contact you shortly.
+
+        </div>
+
+    </form>
+
+</div>
+```
+
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+
+```
+<div>
+    NI<span>.STUDIO</span>
+</div>
+
+<div>
+    Photography & Visual Stories
+</div>
+
+<a
+    href="https://www.instagram.com/ni__studio?stkn=cHJybG5iZXhuZXpr&utm_source=qr"
+    class="instagram-link"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="NI Studio on Instagram"
+    title="NI Studio on Instagram"
+>
+
+    <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+    >
+
+        <rect
+            x="3"
+            y="3"
+            width="18"
+            height="18"
+            rx="5"
+            ry="5"
+        ></rect>
+
+        <circle
+            cx="12"
+            cy="12"
+            r="4"
+        ></circle>
+
+        <circle
+            cx="17.5"
+            cy="6.5"
+            r="1"
+            fill="currentColor"
+            stroke="none"
+        ></circle>
+
+    </svg>
+
+</a>
+
+<div>
+    © 2026 NI Studio
+</div>
+```
+
+</footer>
+
+<!-- =========================================================
+     LIGHTBOX
+========================================================= -->
+
+<div
+    class="lightbox"
+    id="lightbox"
+>
+
+```
+<button
+    class="lightbox-close"
+    aria-label="Close"
+>
+    &times;
+</button>
+
+<button
+    class="lightbox-prev"
+    aria-label="Previous image"
+>
+    &#10094;
+</button>
+
+<img
+    src=""
+    alt=""
+>
+
+<button
+    class="lightbox-next"
+    aria-label="Next image"
+>
+    &#10095;
+</button>
+```
+
+</div>
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+
+/* =========================================================
+   GALLERY FILTER
+========================================================= */
+
+const filterButtons =
+    document.querySelectorAll(".filter-btn");
+
+const galleryItems =
+    document.querySelectorAll(".gallery-item");
+
+filterButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        const filter =
+            button.dataset.filter;
+
+        filterButtons.forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        galleryItems.forEach(item => {
+
+            const category =
+                item.dataset.category;
+
+            if (
+                filter === "all" ||
+                category === filter
+            ) {
+
+                item.style.display = "";
+
+            } else {
+
+                item.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+});
+
+
+/* =========================
+           BEFORE / AFTER SLIDER
+        ========================= */
+
+        const compareContainer =
+            document.getElementById("compareContainer");
+
+        const compareAfter =
+            document.getElementById("compareAfter");
+
+        const compareSlider =
+            document.getElementById("compareSlider");
+
+
+        let isSliding = false;
+
+
+        function updateSlider(x) {
+
+            const rect =
+                compareContainer.getBoundingClientRect();
+
+
+            let position =
+                x - rect.left;
+
+
+            position =
+                Math.max(
+                    0,
+                    Math.min(position, rect.width)
+                );
+
+
+            const percentage =
+                (position / rect.width) * 100;
+
+
+            compareAfter.style.width =
+                `${percentage}%`;
+
+
+            compareSlider.style.left =
+                `${percentage}%`;
+
+        }
+
+
+        compareContainer.addEventListener(
+            "mousedown",
+            (e) => {
+
+                isSliding = true;
+
+                updateSlider(e.clientX);
+
+            }
+        );
+
+
+        window.addEventListener(
+            "mouseup",
+            () => {
+
+                isSliding = false;
+
+            }
+        );
+
+
+        window.addEventListener(
+            "mousemove",
+            (e) => {
+
+                if (!isSliding) return;
+
+                updateSlider(e.clientX);
+
+            }
+        );
+
+
+        compareContainer.addEventListener(
+            "touchmove",
+            (e) => {
+
+                updateSlider(
+                    e.touches[0].clientX
+                );
+
+            }
+        );
+
+
+/* =========================================================
+   BOOKING FORM
+========================================================= */
+
+const bookingForm =
+    document.getElementById(
+        "bookingForm"
+    );
+
+const formSuccess =
+    document.getElementById(
+        "formSuccess"
+    );
+
+bookingForm.addEventListener(
+    "submit",
+    async e => {
+
+        e.preventDefault();
+
+        const response =
+            await fetch(
+                bookingForm.action,
+                {
+                    method: "POST",
+
+                    body:
+                        new FormData(
+                            bookingForm
+                        ),
+
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+        if (response.ok) {
+
+            formSuccess.classList.add(
+                "show"
+            );
+
+            bookingForm.reset();
+
+            setTimeout(() => {
+
+                formSuccess.classList.remove(
+                    "show"
+                );
+
+            }, 6000);
+
+        } else {
+
+            alert(
+                "Something went wrong. Please try again."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FPS DISPLAY
+========================================================= */
+
+let frames = 0;
+
+let lastTime =
+    performance.now();
+
+function updateFPS(time) {
+
+    frames++;
+
+    if (
+        time - lastTime >= 1000
+    ) {
+
+        document
+            .getElementById(
+                "fpsCounter"
+            )
+            .textContent = frames;
+
+        frames = 0;
+
+        lastTime = time;
+
+    }
+
+    requestAnimationFrame(
+        updateFPS
+    );
+
+}
+
+requestAnimationFrame(
+    updateFPS
+);
+
+
+/* =========================================================
+   GALLERY LIGHTBOX
+========================================================= */
+
+const lightbox =
+    document.getElementById(
+        "lightbox"
+    );
+
+const lightboxImg =
+    lightbox.querySelector("img");
+
+const lightboxClose =
+    lightbox.querySelector(
+        ".lightbox-close"
+    );
+
+const prevBtn =
+    document.querySelector(
+        ".lightbox-prev"
+    );
+
+const nextBtn =
+    document.querySelector(
+        ".lightbox-next"
+    );
+
+const galleryImages =
+    document.querySelectorAll(
+        ".gallery-img-wrapper img"
+    );
+
+let currentImage = 0;
+
+galleryImages.forEach(
+    (img,index) => {
+
+        img.addEventListener(
+            "click",
+            () => {
+
+                currentImage = index;
+
+                lightboxImg.src =
+                    img.src;
+
+                lightboxImg.alt =
+                    img.alt;
+
+                lightbox.style.display =
+                    "flex";
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   SETUP LIGHTBOX
+   READS ALL SETUP IMAGES FROM HTML
+========================================================= */
+
+const setupClickImages =
+    document.querySelectorAll(
+        ".setup-click-image"
+    );
+
+
+const setupImages =
+    Array.from(setupClickImages).map(element => {
+
+        const img =
+            element.tagName === "IMG"
+                ? element
+                : element.querySelector("img");
+
+        return {
+            element: element,
+            src: img.getAttribute("src"),
+            alt:
+                img.getAttribute("alt") ||
+                "NI Studio Setup"
+        };
+
+    });
+
+
+let currentSetupImage = 0;
+
+let lightboxMode = "gallery";
+
+
+function openSetupLightbox(index) {
+
+    if (
+        index < 0 ||
+        index >= setupImages.length
+    ) {
+        return;
+    }
+
+    currentSetupImage = index;
+
+    lightboxMode = "setup";
+
+    lightboxImg.src =
+        setupImages[index].src;
+
+    lightboxImg.alt =
+        setupImages[index].alt;
+
+    lightbox.style.display =
+        "flex";
+
+}
+
+
+/* =========================================================
+   OPEN SETUP LIGHTBOX ON IMAGE CLICK
+========================================================= */
+
+setupClickImages.forEach(
+    (element, index) => {
+
+        element.addEventListener(
+            "click",
+            e => {
+
+                e.preventDefault();
+
+                e.stopPropagation();
+
+                openSetupLightbox(index);
+
+            }
+        );
+
+    }
+);
+
+
+function showSetupImage(index) {
+
+    currentSetupImage =
+        (
+            index +
+            setupImages.length
+        ) %
+        setupImages.length;
+
+    lightboxImg.src =
+        setupImages[
+            currentSetupImage
+        ].src;
+
+    lightboxImg.alt =
+        setupImages[
+            currentSetupImage
+        ].alt;
+
+}
+
+
+/* =========================================================
+   SETUP IMAGE CLICK
+   IMAGE SOURCE COMES DIRECTLY FROM HTML
+========================================================= */
+
+setupClickImages.forEach(
+    (img, index) => {
+
+        img.addEventListener(
+            "click",
+            e => {
+
+                e.preventDefault();
+
+                e.stopPropagation();
+
+                openSetupLightbox(index);
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   CLOSE LIGHTBOX
+========================================================= */
+
+lightboxClose.addEventListener(
+    "click",
+    () => {
+
+        lightbox.style.display =
+            "none";
+
+        lightboxMode =
+            "gallery";
+
+    }
+);
+
+
+lightbox.addEventListener(
+    "click",
+    e => {
+
+        if (
+            e.target === lightbox
+        ) {
+
+            lightbox.style.display =
+                "none";
+
+            lightboxMode =
+                "gallery";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LIGHTBOX PREVIOUS
+========================================================= */
+
+prevBtn.addEventListener(
+    "click",
+    e => {
+
+        e.stopPropagation();
+
+        if (
+            lightboxMode === "setup"
+        ) {
+
+            showSetupImage(
+                currentSetupImage - 1
+            );
+
+            return;
+
+        }
+
+
+        currentImage =
+            (
+                currentImage -
+                1 +
+                galleryImages.length
+            ) %
+            galleryImages.length;
+
+        lightboxImg.src =
+            galleryImages[
+                currentImage
+            ].src;
+
+        lightboxImg.alt =
+            galleryImages[
+                currentImage
+            ].alt;
+
+    }
+);
+
+
+/* =========================================================
+   LIGHTBOX NEXT
+========================================================= */
+
+nextBtn.addEventListener(
+    "click",
+    e => {
+
+        e.stopPropagation();
+
+        if (
+            lightboxMode === "setup"
+        ) {
+
+            showSetupImage(
+                currentSetupImage + 1
+            );
+
+            return;
+
+        }
+
+
+        currentImage =
+            (
+                currentImage +
+                1
+            ) %
+            galleryImages.length;
+
+        lightboxImg.src =
+            galleryImages[
+                currentImage
+            ].src;
+
+        lightboxImg.alt =
+            galleryImages[
+                currentImage
+            ].alt;
+
+    }
+);
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    e => {
+
+        if (
+            lightbox.style.display !==
+            "flex"
+        ) return;
+
+
+        if (
+            e.key === "Escape"
+        ) {
+
+            lightbox.style.display =
+                "none";
+
+            lightboxMode =
+                "gallery";
+
+        }
+
+
+        if (
+            e.key === "ArrowLeft"
+        ) {
+
+            prevBtn.click();
+
+        }
+
+
+        if (
+            e.key === "ArrowRight"
+        ) {
+
+            nextBtn.click();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   NEW STUDIO SELECTOR
+========================================================= */
+
+const setupOptions =
+    document.querySelectorAll(
+        ".setup-option"
+    );
+
+const stageSlides =
+    document.querySelectorAll(
+        ".stage-slide"
+    );
+
+const serviceSelect =
+    document.querySelector(
+        'select[name="service"]'
+    );
+
+const bookingSection =
+    document.getElementById(
+        "booking"
+    );
+
+const setupServiceMap = {
+
+    "full-studio":
+        "full-studio-access",
+
+    "room-area":
+        "room-area",
+
+    "cyclorama":
+        "cyclorama",
+
+    "extra-setups":
+        "extra-setups"
+
+};
+
+
+function activateSetup(
+    setup,
+    shouldScroll = false
+) {
+
+    setupOptions.forEach(option => {
+
+        option.classList.toggle(
+            "active",
+            option.dataset.setup === setup
+        );
+
+    });
+
+
+    stageSlides.forEach(slide => {
+
+        slide.classList.toggle(
+            "active",
+            slide.dataset.stage === setup
+        );
+
+    });
+
+
+    if (
+        serviceSelect &&
+        setupServiceMap[setup]
+    ) {
+
+        serviceSelect.value =
+            setupServiceMap[setup];
+
+    }
+
+
+    if (shouldScroll) {
+
+        bookingSection.scrollIntoView({
+            behavior: "smooth"
+        });
+
+    }
+
+}
+
+
+setupOptions.forEach(option => {
+
+    option.addEventListener(
+        "mouseenter",
+        () => {
+
+            if (
+                window.innerWidth > 900
+            ) {
+
+                activateSetup(
+                    option.dataset.setup
+                );
+
+            }
+
+        }
+    );
+
+
+    option.addEventListener(
+        "click",
+        () => {
+
+            activateSetup(
+                option.dataset.setup
+            );
+
+        }
+    );
+
+});
+
+
+const stageBookButtons =
+    document.querySelectorAll(
+        "[data-book-setup]"
+    );
+
+
+stageBookButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        e => {
+
+            e.stopPropagation();
+
+            const setup =
+                button.dataset.bookSetup;
+
+            activateSetup(
+                setup,
+                true
+            );
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   MOBILE VIDEO PREVIEW
+========================================================= */
+
+const videos =
+    document.querySelectorAll(
+        ".reel-card video"
+    );
+
+
+videos.forEach(video => {
+
+    const card =
+        video.closest(
+            ".reel-card"
+        );
+
+    const preview =
+        document.createElement(
+            "div"
+        );
+
+    preview.className =
+        "video-preview";
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+    const playButton =
+        document.createElement(
+            "button"
+        );
+
+    playButton.type = "button";
+
+    playButton.setAttribute(
+        "aria-label",
+        "Play video"
+    );
+
+    playButton.innerHTML = "▶";
+
+    preview.appendChild(canvas);
+
+    preview.appendChild(
+        playButton
+    );
+
+    card.insertBefore(
+        preview,
+        video
+    );
+
+
+    function createPreview() {
+
+        if (
+            !video.videoWidth ||
+            !video.videoHeight
+        ) {
+
+            return;
+
+        }
+
+        canvas.width =
+            video.videoWidth;
+
+        canvas.height =
+            video.videoHeight;
+
+        const context =
+            canvas.getContext(
+                "2d"
+            );
+
+        context.drawImage(
+            video,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+        preview.classList.add(
+            "ready"
+        );
+
+    }
+
+
+    video.addEventListener(
+        "loadeddata",
+        createPreview,
+        { once: true }
+    );
+
+
+    playButton.addEventListener(
+        "click",
+        () => {
+
+            preview.classList.remove(
+                "ready"
+            );
+
+            video.play();
+
+        }
+    );
+
+});
+
+
+</script>
+
+</body>
+
+</html>
