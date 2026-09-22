@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NI Studio — Admin</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6f1;
+            color: #263832;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #263832;
+            color: white;
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 22px;
+            letter-spacing: 2px;
+        }
+
+        header span {
+            font-size: 13px;
+            opacity: .7;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .admin-card {
+            background: white;
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 15px 40px rgba(38,56,50,.08);
+        }
+
+        .admin-card h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            border: 1px solid #d7e1da;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font: inherit;
+            color: #263832;
+            background: #fafcfb;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        button {
+            border: 0;
+            border-radius: 10px;
+            padding: 13px 20px;
+            background: #f2946e;
+            color: #263832;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: .9;
+        }
+
+        .notice {
+            background: #e4eee7;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>NI STUDIO // ADMIN</h1>
+    <span>Content Management</span>
+</header>
+
+<main>
+
+    <div class="notice">
+        This dashboard will be used to manage NI Studio website content.
+    </div>
+
+    <section class="admin-card">
+        <h2>Studio Information</h2>
+
+        <div class="field">
+            <label>Studio Name</label>
+            <input type="text" value="NI Studio">
+        </div>
+
+        <div class="field">
+            <label>Instagram</label>
+            <input
+                type="text"
+                value="https://www.instagram.com/ni__studio/"
+            >
+        </div>
+
+        <div class="field">
+            <label>Hero Image</label>
+            <input type="text" value="home.jpeg">
+        </div>
+
+        <button type="button">
+            Save Changes
+        </button>
+    </section>
+
+    <section class="admin-card">
+        <h2>Studio Setup</h2>
+
+        <div class="field">
+            <label>Full Studio Image</label>
+            <input type="text" value="accces 4 area.jpeg">
+        </div>
+
+        <div class="field">
+            <label>Area 1 Image</label>
+            <input type="text" value="area1.jpeg">
+        </div>
+
+        <div class="field">
+            <label>Area 2 Image</label>
+            <input type="text" value="area2.jpeg">
+        </div>
+
+        <div class="field">
+            <label>Area 3 Image</label>
+            <input type="text" value="area3.jpeg">
+        </div>
+
+        <div class="field">
+            <label>Room Area Image</label>
+            <input type="text" value="room area.jpeg">
+        </div>
+
+        <div class="field">
+            <label>Cyclorama Image</label>
+            <input type="text" value="cyclorama area.jpeg">
+        </div>
+
+        <div class="field">
+            <label>Extra Setups Image</label>
+            <input type="text" value="extra setups.jpeg">
+        </div>
+
+        <button type="button">
+            Save Setup
+        </button>
+    </section>
+
+</main>
+
+</body>
+</html>
