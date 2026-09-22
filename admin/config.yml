@@ -1,1 +1,43 @@
+backend:
+  name: github
+  repo: mohamedmostafa367/ni-studio
+  branch: main
 
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "content"
+    label: "NI Studio Content"
+    files:
+      - name: "site"
+        label: "Studio Settings"
+        file: "content/site.json"
+        fields:
+          - label: "Studio Name"
+            name: "studio_name"
+            widget: "string"
+
+          - label: "Instagram"
+            name: "instagram"
+            widget: "string"
+
+          - label: "Hero Image"
+            name: "hero_image"
+            widget: "image"
+
+          - label: "Services"
+            name: "services"
+            widget: "list"
+            fields:
+              - label: "Name"
+                name: "name"
+                widget: "string"
+
+              - label: "Price"
+                name: "price"
+                widget: "string"
+
+              - label: "Description"
+                name: "description"
+                widget: "text"
