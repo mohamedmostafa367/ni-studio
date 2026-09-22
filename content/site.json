@@ -1,0 +1,22 @@
+{
+  "studio_name": "NI Studio",
+  "instagram": "https://www.instagram.com/ni__studio/",
+  "hero_image": "home.jpeg",
+  "services": [
+    {
+      "name": "Full Studio Access",
+      "price": "1500 EGP / hour",
+      "description": "Access to all studio areas."
+    },
+    {
+      "name": "Room Area",
+      "price": "1000 EGP / hour",
+      "description": "Private room studio area."
+    },
+    {
+      "name": "Extra Backdrop",
+      "price": "1000 EGP / shoot",
+      "description": "Two-sided extra backdrop setup."
+    }
+  ]
+}
